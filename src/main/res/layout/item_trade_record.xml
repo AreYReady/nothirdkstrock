@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:id="@+id/ll_trade_contain"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@id/someId"
+        android:layout_width="fill_parent"
+        android:layout_height="85.0dip"
+        android:background="@drawable/position_main_row_bg">
+
+        <LinearLayout
+            android:id="@id/mainRowView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:baselineAligned="false"
+            android:gravity="top"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.69"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0.0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="1.0dip"
+                        android:layout_marginTop="4.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="top"
+                        android:orientation="vertical">
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/pAssetName1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4.0dip"
+                            android:layout_marginLeft="4.0dip"
+                            android:layout_marginRight="1.0dip"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:text="USD/GPY "
+                            android:textColor="#ff777777"
+                            android:textSize="14.0sp"
+                            android:textStyle="bold" />
+
+                        <RelativeLayout
+                            android:id="@id/RelativeLayout1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5.0dip"
+                            android:layout_marginRight="2.0dip">
+
+                            <com.dqwl.optiontrade.widget.AutofitTextView
+                                android:id="@id/goalRateViewTitle"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginRight="1.0dip"
+                                android:gravity="center_horizontal"
+                                android:textColor="#ff605e5e"
+                                android:text="到期价格"
+                                android:textSize="10.0sp"
+                                android:visibility="visible" />
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="false"
+                                android:layout_below="@id/goalRateViewTitle"
+                                android:gravity="center_vertical">
+
+                                <ImageView
+                                    android:id="@+id/assetTypeImageView"
+                                    android:layout_width="20.0dip"
+                                    android:layout_height="20.0dip"
+                                    android:layout_marginLeft="4.0dip"
+                                    android:src="@mipmap/call_small_icon" />
+
+                                <LinearLayout
+                                    android:id="@id/ratinglayoutView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="2.0dip"
+                                    android:gravity="center_vertical"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:id="@id/FrameLayout1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center">
+
+                                        <LinearLayout
+                                            android:id="@id/backgroundAnim"
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="fill_parent"
+                                            android:gravity="center_vertical"
+                                            android:orientation="horizontal"
+                                            android:visibility="invisible" />
+
+                                        <LinearLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="1.0dip"
+                                            android:layout_marginRight="1.0dip"
+                                            android:gravity="center"
+                                            android:orientation="vertical">
+
+                                            <TextView
+                                                android:id="@+id/currentRate1"
+                                                android:layout_width="fill_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="1.0dip"
+                                                android:lines="1"
+                                                android:text="1.12131"
+                                                android:textColor="#ff000000"
+                                                android:textSize="13.0sp"
+                                                android:textStyle="bold" />
+                                        </LinearLayout>
+                                    </FrameLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="1.0px"
+                        android:layout_height="fill_parent"
+                        android:layout_marginBottom="20.0dip"
+                        android:layout_marginTop="10.0dip"
+                        android:background="#ffb3b3b3" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="0.31"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent">
+
+                    <LinearLayout
+                        android:id="@+id/ll_complete_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="1.0dip"
+                        android:layout_marginTop="7.0dip"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingLeft="2.0dip"
+                        android:paddingRight="3.0dip">
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/payoutTitleView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="盈利金额"
+                            android:lines="1"
+                            android:textColor="#ff605e5e"
+                            android:textSize="11.0sp" />
+
+                        <TextView
+                            android:id="@+id/payoutVal1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8.0dip"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="$89.4"
+                            android:textColor="#ff000000"
+                            android:textSize="11.0sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="40.0dip">
+
+                        <LinearLayout
+                            android:id="@id/additionalButtonLay"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginBottom="5.0dip"
+                            android:baselineAligned="false"
+                            android:gravity="center"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:id="@id/sellButtonLay"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.333"
+                                android:clickable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:id="@id/imageButtonSell"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5.0dip"
+                                    android:paddingTop="3.0dip"
+                                    android:src="@drawable/megaphone_button_selector" />
+
+                                <TextView
+                                    android:id="@id/sellBtTitleView1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:text="jklasdf"
+                                    android:textColor="#ff2c2a2a"
+                                    android:textSize="11.0sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@id/rolloverButtonLay"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.333"
+                                android:clickable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+                                <ImageView
+                                    android:id="@id/imageButtonRollOver"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/rollover_button_selector" />
+
+                                <TextView
+                                    android:id="@id/rolloverBtTitleView1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:textColor="#ff2c2a2a"
+                                    android:textSize="11.0sp"
+                                    android:text="ffffff"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@id/doubleupButtonLay"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.333"
+                                android:clickable="true"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@id/imageButtonDoubleUp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingTop="2.0dip"
+                                    android:src="@drawable/doubleup_button_selector" />
+
+                                <TextView
+                                    android:id="@id/doubleupBtTitleView1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:minLines="1"
+                                    android:text="jklasdf"
+                                    android:textColor="#ff2c2a2a"
+                                    android:textSize="11.0sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@id/expiredValuesLay"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginBottom="10.0dip"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@id/payoutTitleView3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5.0dip"
+                                android:textColor="#ff605e5e"
+                                android:textSize="18.0sp"
+                                android:text="盈利金额"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="0.0dip"
+                                android:layout_weight="1.0"
+                                android:baselineAligned="false">
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_weight="0.5"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@id/positionAmountTitleLeft"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="以上"
+                                        android:textColor="#ff605e5e"
+                                        android:textSize="13.0sp" />
+
+                                    <TextView
+                                        android:id="@id/positionAmountLeft"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="TextView"
+                                        android:textColor="#ff34760f"
+                                        android:textSize="16.0sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_weight="0.5"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@id/positionAmountTitleRight"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="以下"
+                                        android:textColor="#ff605e5e"
+                                        android:textSize="13.0sp" />
+
+                                    <TextView
+                                        android:id="@id/positionAmountRight"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="TextView"
+                                        android:textColor="#ffff323b"
+                                        android:textSize="16.0sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@id/sixtySecViewLay"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginBottom="5.0dip"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:id="@id/timerRowContainerLay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"
+                                android:gravity="center|left"
+                                android:orientation="vertical" />
+
+                            <TextView
+                                android:id="@id/timeLeftTitleView1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="1.0dip"
+                                android:textColor="#ff605e5e"
+                                android:text="jklasdf"
+                                android:textSize="9.0sp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+                        <com.dqwl.optiontrade.widget.SmallProgressBar
+                            android:layout_width="match_parent"
+                            android:id="@+id/spb_trade_record"
+                            android:layout_height="match_parent"/>
+                        <LinearLayout
+                            android:id="@id/oneTouchOpeneddPosLay"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginBottom="5.0dip"
+                            android:gravity="center"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:baselineAligned="false">
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginLeft="10.0dip"
+                                    android:layout_weight="0.5"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <com.dqwl.optiontrade.widget.AutofitTextView
+                                        android:id="@id/directionTitleView1"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_horizontal"
+                                        android:lines="1"
+                                        android:text="ffff"
+                                        android:textColor="#ff605e5e"
+                                        android:textSize="15.0sp" />
+
+                                    <com.dqwl.optiontrade.widget.AutofitTextView
+                                        android:id="@id/directionTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="7.0dip"
+                                        android:lines="1"
+                                        android:text="$8.5"
+                                        android:textColor="#ff000000"
+                                        android:textSize="19.0sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="10.0dip"
+                                    android:layout_weight="0.5"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <com.dqwl.optiontrade.widget.AutofitTextView
+                                        android:id="@id/unitsTitleView1"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_horizontal"
+                                        android:lines="1"
+                                        android:text="ffff"
+                                        android:textColor="#ff605e5e"
+                                        android:textSize="15.0sp" />
+
+                                    <com.dqwl.optiontrade.widget.AutofitTextView
+                                        android:id="@id/unitsTextView"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="7.0dip"
+                                        android:lines="1"
+                                        android:text="$0"
+                                        android:textColor="#ff000000"
+                                        android:textSize="19.0sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@id/statusViewContainer2"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginBottom="5.0dip"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@id/statusTitleView1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:shadowColor="#ff000000"
+                                android:shadowDy="1.0"
+                                android:shadowRadius="1.0"
+                                android:text="jlasdf"
+                                android:textColor="#ff605e5e"
+                                android:textSize="11.0sp" />
+
+                            <TextView
+                                android:id="@id/binaryExpPosStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4.0dip"
+                                android:text="tietest"
+                                android:textColor="#ff000000"
+                                android:textSize="20.0sp"
+                                android:textStyle="bold"
+                                android:visibility="visible" />
+                        </LinearLayout>
+                    </FrameLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/LinearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="1.0dip"
+            android:layout_marginLeft="5.0dip"
+            android:layout_marginRight="5.0dip"
+            android:gravity="center_vertical">
+
+            <com.dqwl.optiontrade.widget.AutofitTextView
+                android:id="@id/expirationTitleView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="到期"
+                android:textColor="#ff605e5e"
+                android:textSize="11.0sp" />
+
+            <com.dqwl.optiontrade.widget.AutofitTextView
+                android:id="@+id/expDateAndTime1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="2016/03/16 22:21:32"
+                android:textColor="#ff000000"
+                android:textSize="11.0sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@id/shareFbBt"
+            android:layout_width="35.0dip"
+            android:layout_height="35.0dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10.0dip"
+            android:background="@drawable/facebook_share_button_selector"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@id/extendedRowView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/position_main_row_bg">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:background="#fff0ebc6"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                android:layout_width="1.0px"
+                android:layout_height="fill_parent"
+                android:alpha="0.3"
+                android:background="@drawable/asset_info_label_shadow_bg" />
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12.0dip"
+                android:layout_marginTop="11.0dip"
+                android:layout_weight="1.0"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="1.0dip"
+                    android:layout_marginRight="1.0dip"
+                    android:layout_weight="0.25"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.dqwl.optiontrade.widget.AutofitTextView
+                        android:id="@id/positionidTitleView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5.0dip"
+                        android:gravity="center_horizontal"
+                        android:text="订单编号"
+                        android:textColor="#ff605e5e"
+                        android:textSize="11.0sp" />
+
+                    <TextView
+                        android:id="@+id/positionId1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="11725252"
+                        android:textColor="#ff000000"
+                        android:textSize="13.0sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="1.0px"
+                    android:layout_height="fill_parent"
+                    android:background="#ffb3b3b3"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@id/strikeRateExpContainer"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="1.0dip"
+                    android:layout_marginRight="1.0dip"
+                    android:layout_weight="0.25"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.dqwl.optiontrade.widget.AutofitTextView
+                        android:id="@id/strikerateTitleView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5.0dip"
+                        android:gravity="center_horizontal"
+                        android:textColor="#ff605e5e"
+                        android:text="执行价格"
+                        android:textSize="11.0sp" />
+
+                    <TextView
+                        android:id="@+id/strikeRate1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="1.12144"
+                        android:textColor="#ff000000"
+                        android:textSize="13.0sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/EXPseparator1"
+                    android:layout_width="1.0px"
+                    android:layout_height="fill_parent"
+                    android:background="#ffb3b3b3"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="1.0dip"
+                    android:layout_marginRight="1.0dip"
+                    android:layout_weight="0.25"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.dqwl.optiontrade.widget.AutofitTextView
+                        android:text="时间"
+                        android:id="@id/timeTitleView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="5.0dip"
+                        android:gravity="center_horizontal"
+                        android:textColor="#ff605e5e"
+                        android:textSize="11.0sp" />
+
+                    <TextView
+                        android:id="@+id/time1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4.0dip"
+                        android:layout_marginRight="4.0dip"
+                        android:gravity="center_horizontal"
+                        android:text="2016/03/09\n02:09:08"
+                        android:textColor="#ff000000"
+                        android:textSize="12.0sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="1.0px"
+                    android:layout_height="fill_parent"
+                    android:background="#ffb3b3b3"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="1.0dip"
+                    android:layout_marginRight="1.0dip"
+                    android:layout_weight="0.25"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.dqwl.optiontrade.widget.AutofitTextView
+                        android:text="保证金"
+                        android:id="@id/investmentTitleView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5.0dip"
+                        android:gravity="center_horizontal"
+                        android:textColor="#ff605e5e"
+                        android:textSize="11.0sp" />
+
+                    <TextView
+                        android:id="@+id/investmentAmmount1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="$5"
+                        android:textColor="#ff000000"
+                        android:textSize="14.0sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="1.0px"
+                android:layout_height="fill_parent"
+                android:alpha="0.3"
+                android:background="@drawable/asset_info_label_shadow_bg" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

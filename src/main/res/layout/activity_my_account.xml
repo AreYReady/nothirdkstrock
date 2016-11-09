@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/main_bg_color"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@id/topViewContainer3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <com.dqwl.optiontrade.widget.TopActionBar
+            android:id="@+id/top_action_bar"
+            android:layout_width="match_parent"
+            title="我的账户"
+            btnText="登出"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#fff3f1f1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:layout_marginTop="5.0dip"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginTop="5.0dip">
+
+                <ImageView
+                    android:id="@id/customerImageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.0dip"
+                    android:src="@mipmap/no_user_image_placeholder" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10.0dip"
+                android:orientation="vertical">
+
+                <com.dqwl.optiontrade.widget.AutofitTextView
+                    android:id="@id/customerNameView1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.0dip"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="tttt"
+                    android:textColor="#ff000000"
+                    android:textSize="20.0sp"
+                    android:textStyle="bold" />
+
+                <com.dqwl.optiontrade.widget.AutofitTextView
+                    android:id="@id/accountNumView1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="left"
+                    android:lines="1"
+                    android:text="id"
+                    android:textColor="#ff000000"
+                    android:textSize="14.0sp"
+                    android:textStyle="bold" />
+
+                <com.dqwl.optiontrade.widget.AutofitTextView
+                    android:id="@id/myAccountBalanceTitle1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1.0dip"
+                    android:layout_marginTop="10.0dip"
+                    android:gravity="left"
+                    android:text="当前余额"
+                    android:textColor="#ff000000"
+                    android:textSize="12.0sp"
+                    android:textStyle="bold" />
+
+                <com.dqwl.optiontrade.widget.AutofitTextView
+                    android:id="@id/balanceView1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-2.0dip"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:textColor="#ff410a0a"
+                    android:text="$90334"
+                    android:textSize="22.0sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:layout_marginTop="10.0dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/my_account_list_bg_color"
+            android:orientation="vertical">
+
+           <com.dqwl.optiontrade.widget.ItemListRow
+               android:id="@+id/item_trade_record"
+               mainText="交易记录"
+               icon="@mipmap/porfolio_a_icon"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"/>
+           <com.dqwl.optiontrade.widget.ItemListRow
+               android:id="@+id/item_setting"
+               mainText="设置"
+               icon="@mipmap/settings_icon"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@id/backToTraidingBt1"
+            android:layout_width="fill_parent"
+            android:layout_height="53.0dip"
+            android:layout_marginBottom="20.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:layout_marginTop="22.0dip"
+            android:background="@drawable/backto_trade_button_selector"
+            android:shadowColor="@color/TEXT_SHADOW_COLOR"
+            android:shadowDx="@integer/TEXT_SHADOW_DX"
+            android:shadowDy="@integer/TEXT_SHADOW_DY"
+            android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+            android:textColor="#ffffffff"
+            android:textSize="20.0sp"
+            android:text="返回交易"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

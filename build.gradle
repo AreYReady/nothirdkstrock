@@ -1,0 +1,81 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'option'
+            keyPassword 'optiontrade123'
+            storeFile file('./OptionKey.jks')
+            storePassword 'dqwl@2016'
+        }
+    }
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+    defaultConfig {
+        applicationId 'com.dqwl.optiontrade'
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0.1"
+    }
+    buildTypes {
+        release {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            //混淆
+            minifyEnabled true
+            //Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
+        }
+    }
+
+    productFlavors {
+        星科技_ {
+            applicationIdSuffix ".xingkeji"
+            buildConfigField 'String', 'API_URL', '"115.29.50.147"'
+            buildConfigField 'Integer', 'USERPORT', '9988'
+            resValue "string", "app_name", "星科技"
+        }
+        MGF_OPTION_ {
+//            applicationIdSuffix ".mgf"
+            buildConfigField 'String', 'API_URL', '"mm.mgfoption.com"'
+            buildConfigField 'Integer', 'USERPORT', '9994'
+            resValue "string", "app_name", "MGF"
+            versionCode 1
+            versionName "1.0.4"
+        }
+        local {
+            applicationIdSuffix ".local"
+            buildConfigField 'String', 'API_URL', '"192.168.0.253"'
+            buildConfigField 'Integer', 'USERPORT', '9988'
+            resValue "string", "app_name", "LOCAL"
+        }
+        productFlavors.all {
+            flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(output.outputFile.parent, name + "_v" + variant.mergedFlavor.versionName + ".apk");
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.android.support:design:24.0.0'
+    compile project(':PullToRefresh')
+}

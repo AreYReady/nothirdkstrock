@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@id/rellayout9"
+        android:layout_width="fill_parent"
+        android:layout_height="67.0dip">
+
+        <ImageView
+            android:id="@id/labelAssetIcon1"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="false"
+            android:layout_centerInParent="false"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5.0dip"
+            android:layout_marginLeft="5.0dip"
+            android:layout_marginTop="8.0dip"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"/>
+
+        <LinearLayout
+            android:id="@id/someTitleId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="6.0dip"
+            android:layout_marginRight="3.0dip"
+            android:layout_toLeftOf="@id/valHolder1"
+            android:layout_toRightOf="@id/labelAssetIcon1">
+
+            <com.dqwl.optiontrade.widget.AutofitTextView
+                android:id="@id/assetNameView11"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:lines="1"
+                android:shadowColor="@color/TEXT_SHADOW_COLOR"
+                android:shadowDx="@integer/TEXT_SHADOW_DX"
+                android:shadowDy="@integer/TEXT_SHADOW_DY"
+                android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+                android:textColor="#ffffffff"
+                android:textSize="20.0sp"
+                android:text="aasdfasdfadf"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/valHolder1"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="false"
+            android:layout_marginRight="4.0dip"
+            android:layout_toLeftOf="@id/versionTitleView"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.dqwl.optiontrade.widget.AutofitTextView
+                android:id="@id/potentialPayoutTitleView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-5.0dip"
+                android:shadowColor="@color/TEXT_SHADOW_COLOR"
+                android:shadowDx="@integer/TEXT_SHADOW_DX"
+                android:shadowDy="@integer/TEXT_SHADOW_DY"
+                android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+                android:text="派息比例"
+                android:textColor="#ffffffff"
+                android:textSize="11.0sp" />
+
+            <com.dqwl.optiontrade.widget.AutofitTextView
+                android:id="@id/profitRiskView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:scrollHorizontally="false"
+                android:shadowColor="@color/TEXT_SHADOW_COLOR"
+                android:shadowDx="@integer/TEXT_SHADOW_DX"
+                android:shadowDy="@integer/TEXT_SHADOW_DY"
+                android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+                android:text="80%"
+                android:textColor="#ffffffff"
+                android:textSize="46.0sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@id/versionTitleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="false"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="2.0dip"
+            android:shadowColor="@color/TEXT_SHADOW_COLOR"
+            android:shadowDx="@integer/TEXT_SHADOW_DX"
+            android:shadowDy="@integer/TEXT_SHADOW_DY"
+            android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+            android:text="‖"
+            android:textColor="#ff4f6618"
+            android:textSize="20.0sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</LinearLayout>

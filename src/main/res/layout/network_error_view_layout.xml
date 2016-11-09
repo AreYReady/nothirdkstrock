@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/LinearLayout1"
+        android:layout_alignTop="@id/LinearLayout1"
+        android:alpha="0.75"
+        android:background="#ff000000" />
+
+    <LinearLayout
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:id="@id/LinearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center|right"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center">
+
+            <ImageView
+                android:padding="5dp"
+                android:id="@id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/network_icon" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@id/networkErrorLabelTitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffffffff"
+                    android:text="连接"
+                    android:textSize="15.0sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:text="点击重新连接到现场交易"
+                    android:id="@id/networkErrorLabelTitle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffc1bcbc"
+                    android:textSize="11.0sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="50.0dip"
+            android:layout_height="50.0dip"
+            android:layout_marginRight="10.0dip"
+            android:background="@drawable/top_bar_botton_selector">
+
+            <ImageButton
+                android:id="@id/networkErrorRefreshButton1"
+                android:layout_width="50.0dip"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
+                android:scaleType="center"
+                android:src="@mipmap/refresh_icon"
+                android:visibility="visible" />
+
+            <com.dqwl.optiontrade.widget.CustomProgressBar
+                android:id="@+id/cpb_network_error"
+                android:layout_width="30.0dip"
+                android:layout_height="30.0dip"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="false"
+                android:scaleType="fitCenter"
+                android:indeterminateDrawable="@drawable/icon_loading_small"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

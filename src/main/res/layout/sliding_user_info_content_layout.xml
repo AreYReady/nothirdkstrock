@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="bottom"
+    android:background="@mipmap/user_info_content_bg">
+
+    <ImageView
+        android:id="@id/sliderUserImageAvatar"
+        android:layout_width="55.0dip"
+        android:layout_height="55.0dip"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginTop="10.0dip"
+        android:contentDescription="imageview"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/no_user_image_placeholder" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sliderUserImageAvatar"
+        android:layout_marginLeft="20.0dip"
+        android:layout_marginTop="10.0dip"
+        android:orientation="vertical">
+
+        <com.dqwl.optiontrade.widget.AutofitTextView
+            android:text="jlkasdf"
+            android:id="@id/sliderUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5.0dip"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="#ffffffff"
+            android:textSize="15.0sp"
+            android:textStyle="bold" />
+
+        <com.dqwl.optiontrade.widget.AutofitTextView
+            android:text="jlkasdf"
+            android:id="@id/userSliderAccountNumber1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textColor="#ffffffff"
+            android:textSize="13.0sp"
+            android:textStyle="bold" />
+
+        <com.dqwl.optiontrade.widget.AutofitTextView
+            android:text="当前余额"
+            android:id="@id/textView32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.0dip"
+            android:lines="1"
+            android:textColor="#ffffffff"
+            android:textSize="11.0sp" />
+
+        <com.dqwl.optiontrade.widget.AutofitTextView
+            android:id="@id/userSliderAccountBalance1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textColor="#fff7f2cb"
+            android:text="jklasdf"
+            android:textSize="21.0sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@id/depositMoneyBt"
+            android:layout_width="wrap_content"
+            android:layout_height="40.0dip"
+            android:layout_marginBottom="10.0dip"
+            android:layout_marginTop="10.0dip"
+            android:background="@drawable/user_info_label_button_bg"
+            android:paddingLeft="15.0dip"
+            android:paddingRight="15.0dip"
+            android:shadowColor="@color/TEXT_SHADOW_COLOR"
+            android:shadowDx="@integer/TEXT_SHADOW_DX"
+            android:shadowDy="@integer/TEXT_SHADOW_DY"
+            android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+            android:textColor="#ffffffff"
+            android:textSize="17.0sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+    </LinearLayout>
+</RelativeLayout>

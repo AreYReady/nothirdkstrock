@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg_color"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@id/topViewContainer1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.dqwl.optiontrade.widget.TopActionBar
+            title="交易"
+            android:id="@+id/top_action_bar"
+            ivLeft="@mipmap/refresh_icon"
+            btnText="我喜爱的产品"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/dummyTopView"
+        android:layout_width="fill_parent"
+        android:layout_height="5.0dip"
+        android:layout_below="@id/topViewContainer1"
+        android:layout_marginLeft="8.0dip"
+        android:layout_marginRight="8.0dip"
+        android:background="@drawable/dummy_top_view_bg"
+        android:orientation="vertical" />
+
+    <ImageView
+        android:id="@id/ImageView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/topInfoLabel"
+        android:src="@mipmap/black_right_triangle" />
+
+    <ImageView
+        android:id="@id/ImageView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topInfoLabel"
+        android:src="@mipmap/black_left_triangle" />
+
+    <RelativeLayout
+        android:id="@id/layContainer3"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/bottomTabHolder"
+        android:layout_below="@id/topInfoLabel"
+        android:layout_marginBottom="-5.0dip"
+        android:layout_marginLeft="8.0dip"
+        android:layout_marginRight="8.0dip"
+        android:background="@drawable/main_screen_white_bg">
+
+        <include layout="@layout/trade_tab_layout" />
+
+        <include
+            layout="@layout/products_tab_layout"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/assets_tab_layout"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@id/optionNotAvailableContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10.0dip"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@id/leftPairsImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/big_clock_icon" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="15.0dip"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@id/naTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff063857"
+                    android:textSize="18.0sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@id/naContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20.0dip"
+                    android:textColor="#ff063857"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@id/infoLabelShadow"
+        android:layout_width="fill_parent"
+        android:layout_height="3.0dip"
+        android:layout_alignLeft="@id/layContainer3"
+        android:layout_alignRight="@id/layContainer3"
+        android:layout_below="@id/topInfoLabel"
+        android:alpha="0.57"
+        android:background="@drawable/asset_info_label_shadow_bg"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:id="@id/topInfoLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dummyTopView"
+        android:background="@drawable/asset_info_label_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10.0dip"
+            android:layout_marginTop="10.0dip">
+
+            <LinearLayout
+                android:id="@id/tradeInfoLabelView1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="20.0dip"
+                    android:layout_weight="0.75"
+                    android:baselineAligned="false"
+                    android:orientation="vertical">
+
+                    <com.dqwl.optiontrade.widget.AutofitTextView
+                        android:id="@id/productTypeTitle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5.0dip"
+                        android:enabled="false"
+                        android:gravity="left"
+                        android:lines="1"
+                        android:text="交易类型"
+                        android:shadowColor="@color/TEXT_SHADOW_COLOR"
+                        android:shadowDx="@integer/TEXT_SHADOW_DX"
+                        android:shadowDy="@integer/TEXT_SHADOW_DY"
+                        android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+                        android:textColor="#ffffffff"
+                        android:textSize="13.0sp" />
+
+                    <com.dqwl.optiontrade.widget.AutofitTextView
+                        android:id="@id/productTypeView2"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5.0dip"
+                        android:layout_marginTop="5.0dip"
+                        android:gravity="left"
+                        android:lines="1"
+                        android:text="60"
+                        android:shadowColor="@color/TEXT_SHADOW_COLOR"
+                        android:shadowDx="@integer/TEXT_SHADOW_DX"
+                        android:shadowDy="@integer/TEXT_SHADOW_DY"
+                        android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+                        android:textColor="#ffffffff"
+                        android:textSize="16.0sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical">
+
+                    <com.dqwl.optiontrade.widget.AutofitTextView
+                        android:id="@id/assetTypeTitle1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5.0dip"
+                        android:gravity="left"
+                        android:lines="1"
+                        android:shadowColor="@color/TEXT_SHADOW_COLOR"
+                        android:shadowDx="@integer/TEXT_SHADOW_DX"
+                        android:shadowDy="@integer/TEXT_SHADOW_DY"
+                        android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+                        android:textColor="#ffffffff"
+                        android:text="产品类型"
+                        android:textSize="13.0sp" />
+
+                    <com.dqwl.optiontrade.widget.AutofitTextView
+                        android:id="@id/assetsTypeView2"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5.0dip"
+                        android:layout_marginTop="5.0dip"
+                        android:gravity="left"
+                        android:lines="1"
+                        android:shadowColor="@color/TEXT_SHADOW_COLOR"
+                        android:shadowDx="@integer/TEXT_SHADOW_DX"
+                        android:shadowDy="@integer/TEXT_SHADOW_DY"
+                        android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+                        android:textColor="#ffffffff"
+                        android:text="外汇"
+                        android:textSize="16.0sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@id/choseInfoLabelView1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15.0dip"
+                android:layout_marginRight="15.0dip"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <com.dqwl.optiontrade.widget.AutofitTextView
+                    android:id="@id/choseInfoTitle1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:lines="1"
+                    android:text="交易类型"
+                    android:textColor="#ffffffff"
+                    android:textSize="19.0sp"
+                    android:textStyle="bold" />
+
+                <com.dqwl.optiontrade.widget.AutofitTextView
+                    android:id="@id/choseInfoTitle2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3.0dip"
+                    android:gravity="left"
+                    android:lines="1"
+                    android:text="60"
+                    android:textColor="#ffffffff"
+                    android:textSize="13.0sp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/bottomTabHolder"
+        android:layout_width="fill_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:baselineAligned="false"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/tabs_container"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/icon_bg_tab"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll_trade_type"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/icon_bg_tab"
+                android:baselineAligned="false"
+                android:gravity="bottom|center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:src="@drawable/icon_trade_type" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5.0dip"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:textSize="10.0sp"
+                    android:text="交易类型"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="@mipmap/tabs_divider_line"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/ll_trade_product"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/icon_bg_tab"
+                android:gravity="bottom|center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_products" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5.0dip"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:text="产品"
+                    android:textColor="@android:color/white"
+                    android:textSize="10.0sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_trade"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/icon_bg_trade"
+                android:gravity="bottom|center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/tab_trade_icon" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5.0dip"
+                    android:layout_marginLeft="6.0dip"
+                    android:layout_marginRight="6.0dip"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:text="交易"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_my_account"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/icon_bg_tab"
+                android:gravity="bottom|center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_account" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5.0dip"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:textSize="10.0sp"
+                    android:text="帐户"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="@mipmap/tabs_divider_line"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/ll_trade_record"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/icon_bg_tab"
+                android:gravity="bottom|center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_trade_histroy" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5.0dip"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:textSize="10.0sp"
+                    android:text="交易记录"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/icon_bg_tab"
+                android:gravity="bottom|center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_bg_tab" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5.0dip"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:textSize="10.0sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:background="@drawable/icon_bg_tab"
+                android:gravity="bottom|center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_trade_histroy" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5.0dip"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:textSize="10.0sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@id/networkErrorContainer1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topInfoLabel"
+        android:layout_marginLeft="8.0dip"
+        android:layout_marginRight="8.0dip"
+        android:orientation="horizontal"
+        android:visibility="invisible" >
+        <include layout="@layout/network_error_view_layout"/>
+    </LinearLayout>
+</RelativeLayout>

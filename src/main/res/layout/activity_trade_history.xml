@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/main_bg_color"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/top_action_bar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="fill_parent"
+        android:layout_height="55.0dip"
+        android:background="@mipmap/position_window_roller_icon">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ImageButton
+                android:id="@id/leftRollerButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/position_roller_left_button_selector" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_trade_record"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/rightRollerButton"
+                android:layout_toRightOf="@id/leftRollerButton" />
+
+            <ImageButton
+                android:id="@id/rightRollerButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="false"
+                android:background="@android:color/transparent"
+                android:src="@drawable/position_roller_right_button_selector" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:alpha="0.15"
+        android:background="@drawable/asset_info_label_shadow_bg" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <RelativeLayout
+                android:id="@id/RelativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_above="@id/bottomTabHolder2"
+                android:background="#ffffffff"
+                android:orientation="vertical">
+
+                <com.handmark.pulltorefresh.library.PullToRefreshListView
+                    android:id="@+id/lv_trade_record"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:cacheColorHint="#00000000"
+                    android:fadingEdge="none"
+                    android:fastScrollEnabled="false"
+                    android:footerDividersEnabled="false"
+                    android:headerDividersEnabled="false"
+                    android:smoothScrollbar="true" />
+
+                <TextView
+                    android:id="@id/pa_posStatusTextView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="50.0dip"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:textColor="#ff171717"
+                    android:textSize="23.0sp"
+                    android:text="没有订单"
+                    android:visibility="invisible" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@id/bottomTabHolder2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@mipmap/tabs_bg"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@id/openPositionsTabBt"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.333"
+                    android:background="@drawable/tab_selected_button_selector"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <com.dqwl.optiontrade.widget.AutofitTextView
+                                android:id="@+id/tv_not_complete_order"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2.0dip"
+                                android:layout_marginRight="2.0dip"
+                                android:textColor="#ffffffff"
+                                android:textSize="15.0sp"
+                                android:text="未结算订单"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@id/openPosistionCount1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5.0dip"
+                                android:text="(0)"
+                                android:textColor="#ffffffff"
+                                android:textSize="14.0sp"
+                                android:textStyle="bold"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:background="@drawable/open_position_counter_bg"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@id/newPositionCount1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2.0dip"
+                                android:layout_marginRight="2.0dip"
+                                android:maxLines="1"
+                                android:padding="3.0dip"
+                                android:text="0"
+                                android:textColor="#ffffffff"
+                                android:textSize="12.0sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                        <com.dqwl.optiontrade.widget.CustomProgressBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:id="@+id/cpb_network_error"/>
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="1.0dip"
+                    android:layout_height="fill_parent"
+                    android:background="#ff837f7f"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@id/expiredPositionsTabBt"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.333"
+                    android:background="@drawable/tab_selected_button_selector"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.dqwl.optiontrade.widget.AutofitTextView
+                        android:id="@+id/tv_complete_order"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2.0dip"
+                        android:layout_marginRight="2.0dip"
+                        android:textColor="#ffffffff"
+                        android:textSize="15.0sp"
+                        android:text="已结算订单"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@id/expiredPositionsCount1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5.0dip"
+                        android:text="(0)"
+                        android:textColor="#ffffffff"
+                        android:textSize="14.0sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

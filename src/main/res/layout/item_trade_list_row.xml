@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="55.0dip"
+        android:background="@drawable/trade_list_row_color_selector">
+
+        <LinearLayout
+            android:id="@id/changeRateHolder1"
+            android:layout_width="wrap_content"
+            android:layout_height="30.0dip"
+            android:layout_alignParentRight="false"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20.0dip"
+            android:layout_toLeftOf="@id/arrowView1"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@id/FrameLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical">
+
+                <LinearLayout
+                    android:id="@id/backgroundAnim"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="invisible" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@id/rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2.0dip"
+                        android:layout_marginLeft="5.0dip"
+                        android:layout_marginRight="5.0dip"
+                        android:layout_marginTop="2.0dip"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="TextView"
+                        android:textColor="#ff000000"
+                        android:textSize="15.0sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/starHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10.0dip"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@id/favoriteCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/star_upressed"
+                android:button="@drawable/favorites_check_box_selector"
+                android:focusable="false" />
+        </LinearLayout>
+
+        <com.dqwl.optiontrade.widget.AutofitTextView
+            android:id="@id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15.0dip"
+            android:layout_marginRight="2.0dip"
+            android:layout_toLeftOf="@id/changeRateHolder1"
+            android:layout_toRightOf="@id/starHolder"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="TextView"
+            android:textColor="#ff000000"
+            android:textSize="15.0sp"
+            android:textStyle="bold" />
+
+        <com.dqwl.optiontrade.widget.AutofitTextView
+            android:id="@id/arrowView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10.0dip"
+            android:text=">"
+            android:textColor="#ff7f7f7f"
+            android:textSize="18.0sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@id/favRowDelBt"
+            android:layout_width="wrap_content"
+            android:layout_height="38.0dip"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="false"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15.0dip"
+            android:background="@drawable/favorites_assets_row_del_bt_bg"
+            android:textColor="#ff000000"
+            android:textSize="15.0sp"
+            android:text="删除"
+            android:textStyle="bold"
+            android:visibility="visible" />
+    </RelativeLayout>
+</LinearLayout>

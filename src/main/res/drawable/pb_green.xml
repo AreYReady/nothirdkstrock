@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item >
+        <bitmap android:src="@mipmap/small_full_green_bg" android:gravity="center"/>
+    </item>
+
+    <item>
+        <bitmap android:src="@mipmap/small_green_center_bg" android:gravity="center"/>
+    </item>
+</layer-list>

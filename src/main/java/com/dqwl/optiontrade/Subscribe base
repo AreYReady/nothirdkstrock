@@ -1,0 +1,25 @@
+ 索引
+ String:
+
+LoginActivity          onTimeOut
+MinaTimeChartActivity   onDisconnectFromServer
+MinaTimeChartActivity   onTimeOut
+TradeIndexActivity      onDisconnectFromServerOrLoginOut
+TradeIndexActivity      onHeartHeat
+TradeIndexActivity      onTimeOut
+TradeRecordActivity     onTimeOut
+
+
+
+handler:
+
+MinaTimeChartActivity   onGetSSLSocketChannel   sticky = true
+TradeIndexActivity      getSocketChannel        sticky = true
+TradeRecordActivity     getSocketChannel        sticky = true
+TradeRecordActivity     onGetHistoryData        sticky = true
+
+
+
+integer:
+
+MinaTimeChartActivity   onOrderAction

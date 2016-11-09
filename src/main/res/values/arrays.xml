@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="end_time">
+        <item>60秒</item>
+        <item>5分钟</item>
+        <item>15分钟</item>
+        <item>30分钟</item>
+        <item>1小时</item>
+        <item>4小时</item>
+        <item>1天</item>
+        <item>1周</item>
+    </string-array>
+    <integer-array name="end_time_second">
+        <item>60</item>
+        <item>300</item>
+        <item>900</item>
+        <item>1800</item>
+        <item>3600</item>
+        <item>14400</item>
+        <item>86400</item>
+        <item>604800</item>
+    </integer-array>
+    <string-array name="end_time_to_server">
+        <item>m1</item>
+        <item>m5</item>
+        <item>m15</item>
+        <item>m30</item>
+        <item>h1</item>
+        <item>h4</item>
+        <item>d1</item>
+        <item>w1</item>
+        <item>mn1</item>
+    </string-array>
+
+    <string-array name="order_type">
+        <item>60</item>
+        <item>标准期权</item>
+        <item>配对</item>
+        <item>长期</item>
+    </string-array>
+    
+    <string-array name="bail_money">
+        <item>10.0</item>
+        <item>20.0</item>
+        <item>30.0</item>
+        <item>50.0</item>
+        <item>100.0</item>
+        <item>500.0</item>
+        <item>1500.0</item>
+        <item>3000.0</item>
+    </string-array>
+</resources>

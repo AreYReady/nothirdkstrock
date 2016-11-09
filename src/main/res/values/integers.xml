@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="google_play_services_version">5089000</integer>
+    <integer name="TEXT_SHADOW_RADIUS">1</integer>
+    <integer name="TEXT_SHADOW_DX">1</integer>
+    <integer name="TEXT_SHADOW_DY">1</integer>
+</resources>

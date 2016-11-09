@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:background="#ff000000"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:background="@drawable/confirmation_dialog_white_bg">
+
+        <LinearLayout
+            android:id="@id/topTitle2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/confirmation_dialog_up_label_bg"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@id/actionTitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:textColor="#ffffffff"
+                android:text="确认"
+                android:textSize="18.0sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/midcontainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topTitle2"
+            android:layout_marginLeft="2.0dip"
+            android:layout_marginRight="2.0dip"
+            android:background="@drawable/confirmation_dialog_middle_label_bg"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0.0dip"
+                android:layout_weight="1.0"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3.0dip"
+                        android:layout_marginTop="3.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/titleTextView1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4.0dip"
+                            android:layout_marginRight="4.0dip"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="旧 到期"
+                            android:textColor="#ff7c7971"
+                            android:textSize="11.0sp" />
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/titleValueView1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2.0dip"
+                            android:layout_marginRight="2.0dip"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:textColor="#ff1f2529"
+                            android:textSize="15.0sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="1.0dip"
+                        android:layout_height="fill_parent"
+                        android:layout_marginTop="5.0dip"
+                        android:background="#ffbdbdbd" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3.0dip"
+                        android:layout_marginTop="3.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/titleTextView2"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4.0dip"
+                            android:layout_marginRight="4.0dip"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="旧 保证金"
+                            android:textColor="#ff7c7971"
+                            android:textSize="11.0sp" />
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/titleValueView2"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3.0dip"
+                            android:layout_marginRight="3.0dip"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="TextView"
+                            android:textColor="#ff1f2529"
+                            android:textSize="15.0sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0dip"
+                    android:layout_marginLeft="5.0dip"
+                    android:layout_marginRight="5.0dip"
+                    android:background="#ffbdbdbd" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3.0dip"
+                        android:layout_marginTop="3.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/titleTextView3"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4.0dip"
+                            android:layout_marginRight="4.0dip"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="产品"
+                            android:textColor="#ff7c7971"
+                            android:textSize="11.0sp" />
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/titleValueView3"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3.0dip"
+                            android:layout_marginRight="3.0dip"
+                            android:ellipsize="end"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="USD"
+                            android:textColor="#ff000000"
+                            android:textSize="15.0sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="1.0dip"
+                        android:layout_height="fill_parent"
+                        android:background="#ffbdbdbd" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3.0dip"
+                        android:layout_marginTop="3.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/titleTextView4"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5.0dip"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="盈利返还金额"
+                            android:textColor="#ff7c7971"
+                            android:textSize="11.0sp" />
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/titleValueView4"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3.0dip"
+                            android:layout_marginRight="3.0dip"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="TextView"
+                            android:textColor="#ff1f2529"
+                            android:textSize="15.0sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0dip"
+                    android:layout_marginLeft="5.0dip"
+                    android:layout_marginRight="5.0dip"
+                    android:background="#ffbdbdbd" />
+
+                <LinearLayout
+                    android:id="@id/bottomInfoRow1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3.0dip"
+                        android:layout_marginTop="3.0dip"
+                        android:layout_weight="1.0"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.dqwl.optiontrade.widget.AutofitTextView
+                            android:id="@id/titleTextView5"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3.0dip"
+                            android:layout_marginRight="3.0dip"
+                            android:gravity="center_horizontal"
+                            android:lines="1"
+                            android:text="价格"
+                            android:textColor="#ff7c7971"
+                            android:textSize="11.0sp" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3.0dip"
+                            android:layout_marginRight="3.0dip"
+                            android:baselineAligned="false"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@id/optionIconView1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@mipmap/put_small_icon"
+                                android:layout_marginRight="2.0dip" />
+
+                            <com.dqwl.optiontrade.widget.AutofitTextView
+                                android:id="@id/titleValueView5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="1.0dip"
+                                android:layout_marginTop="1.0dip"
+                                android:gravity="center_horizontal"
+                                android:lines="1"
+                                android:text="1.56666"
+                                android:textColor="#ff1f2529"
+                                android:textSize="14.0sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="1.0dip"
+                        android:layout_height="fill_parent"
+                        android:layout_marginBottom="5.0dip"
+                        android:background="#ffbdbdbd" />
+
+                    <LinearLayout
+                        android:id="@id/justEmpty"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.0"
+                        android:baselineAligned="false"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@id/deposit_MainTitleView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ff1f2529" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/bottomLayContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/midcontainer"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:id="@id/RelativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+
+                <com.dqwl.optiontrade.widget.CustomProgressBar
+                    android:id="@id/customProgressBar3"
+                    android:layout_width="45.0dip"
+                    android:layout_height="45.0dip"
+                    android:layout_centerHorizontal="false"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    android:src="@mipmap/loading_circle_small" />
+
+                <LinearLayout
+                    android:visibility="invisible"
+                    android:id="@id/countDownTimerContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/messageContainer1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10.0dip"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@id/rowIcon1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/confirrmation_window_timer_icon" />
+
+                    <TextView
+                        android:id="@id/counterView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3.0dip"
+                        android:text="00:00:03"
+                        android:textColor="#ff1f2529"
+                        android:textSize="26.0sp"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:visibility="invisible"
+                    android:id="@id/bottomContainer"
+                    android:layout_width="fill_parent"
+                    android:layout_height="58.0dip"
+                    android:layout_below="@id/countDownTimerContainer"
+                    android:layout_marginBottom="8.0dip"
+                    android:layout_marginTop="10.0dip">
+
+                    <LinearLayout
+                        style="?android:attr/buttonBarStyle"
+                        android:id="@id/btContainer1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            style="?android:attr/buttonBarButtonStyle"
+                            android:id="@id/cancelButton1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="7.0dip"
+                            android:layout_marginRight="5.0dip"
+                            android:layout_weight="0.5"
+                            android:background="@drawable/open_account_button_mscreen_selector"
+                            android:shadowColor="#ffffffff"
+                            android:shadowDx="@integer/TEXT_SHADOW_DX"
+                            android:shadowDy="@integer/TEXT_SHADOW_DY"
+                            android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+                            android:text="取消"
+                            android:textColor="#ff000000"
+                            android:textSize="19.0sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            style="?android:attr/buttonBarButtonStyle"
+                            android:id="@id/approveButton1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5.0dip"
+                            android:layout_marginRight="7.0dip"
+                            android:layout_marginTop="1.0dip"
+                            android:layout_weight="0.5"
+                            android:background="@drawable/login_button_mscreen_selector"
+                            android:shadowColor="@color/TEXT_SHADOW_COLOR"
+                            android:shadowDx="@integer/TEXT_SHADOW_DX"
+                            android:shadowDy="@integer/TEXT_SHADOW_DY"
+                            android:shadowRadius="@integer/TEXT_SHADOW_RADIUS"
+                            android:text="确认"
+                            android:textColor="#ffffffff"
+                            android:textSize="19.0sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@id/messageContainer1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="false"
+                    android:layout_marginLeft="15.0dip"
+                    android:layout_marginRight="15.0dip"
+                    android:layout_marginTop="20.0dip"
+                    android:gravity="center_horizontal"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@id/messageIconView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/green_check_icon" />
+
+                    <TextView
+                        android:id="@id/messageView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5.0dip"
+                        android:gravity="center_horizontal"
+                        android:text="正在处理中"
+                        android:textColor="#ff000000"
+                        android:textSize="15.0sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
