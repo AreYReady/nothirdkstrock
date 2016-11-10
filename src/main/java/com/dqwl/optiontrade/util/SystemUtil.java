@@ -137,4 +137,7 @@ public class SystemUtil {
 
         return NetworkType.NET_3G;
     }
+    public static String getTAG(Class className){
+        return "hsc : "+ className.getSimpleName();
+    }
 }

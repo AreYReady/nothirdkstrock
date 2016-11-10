@@ -162,7 +162,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     private int timeLeft = 3;//
     private TimeLeftPopOrder timeLeftPopOrder;//下单倒计时确认线程
     /**
-     * 到期时间选择后的最大刻度，是历史数据period的60倍，单位秒
+     * 到期时间选择后的最大选择后的最大刻度，是历史数据period的60倍，单位秒
      */
     private int maxDegreeSecond = 60;
 
@@ -270,6 +270,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         timeOffset = getIntent().getLongExtra(TradeIndexActivity.TIMEOFFSET, 0);
         allSubscribeSymbols = (ArrayList<BeanSymbolConfig.SymbolsBean>) getIntent().getSerializableExtra(TradeIndexActivity.SYMBOL);
         symbolPosition = getIntent().getIntExtra(TradeIndexActivity.POSITION, 0);
+//        getIntent().getSerializableExtra(LoginActivity.ACTIVEORDER);
 //        bailMoneys = getResources().getStringArray(R.array.bail_money);
         vol_max = getIntent().getIntExtra(TradeIndexActivity.VOL_MAX, 0);
         vol_min = getIntent().getIntExtra(TradeIndexActivity.VOL_MIN, 0);

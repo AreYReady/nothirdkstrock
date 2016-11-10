@@ -18,4 +18,5 @@ public interface MessageType {
     int TYPE_BINARY_ORDER_RESPONSE = 211;
     int TYPE_BINARY_USER_INFO = 1300;
     int TYPE_BINARY_ALL_SYMBOL = 1201;
+    String TYPE_ORDER_SREVER_TIME="{\"msg_type\":280}";
 }

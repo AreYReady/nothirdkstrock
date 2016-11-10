@@ -13,6 +13,7 @@ import com.dqwl.optiontrade.bean.RealTimeDataList;
 import com.dqwl.optiontrade.bean.ResponseEvent;
 import com.dqwl.optiontrade.constant.MessageType;
 import com.dqwl.optiontrade.util.SocketUtil;
+import com.dqwl.optiontrade.util.SystemUtil;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -26,7 +27,7 @@ import java.nio.ByteBuffer;
 public class SSLDecoderImp implements Decoder<String> {
 
     public static final String HEART_BEAT = "HEART_BEAT";
-    private String TAG="hsc";
+    private String TAG= SystemUtil.getTAG(this.getClass());
 
     @Override
     public String decode(ByteBuffer in) throws DecoderException {

@@ -184,6 +184,9 @@ public class TimeChartShowPresenterCompl implements ITimeChartShowPresenter{
         sendMessageToSubThread(orderStr);
     }
 
+    /**
+     * 获取服务器时间
+     */
     @Override
     public void getServerTime() {
         sendMessageToSubThread("{\"msg_type\":280}");

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -19,6 +20,7 @@ import com.dqwl.optiontrade.application.OptionApplication;
 import com.dqwl.optiontrade.base.BaseActivity;
 import com.dqwl.optiontrade.bean.BeanOrderRecord;
 import com.dqwl.optiontrade.bean.BeanOrderResult;
+import com.dqwl.optiontrade.bean.BeanServerTime;
 import com.dqwl.optiontrade.bean.BeanSymbolConfig;
 import com.dqwl.optiontrade.bean.DataEvent;
 import com.dqwl.optiontrade.constant.MessageType;
@@ -44,6 +46,8 @@ import java.util.Set;
 
 import static com.dqwl.optiontrade.mvp.trade_index.TradeIndexActivity.activeOrder;
 
+//import static com.dqwl.optiontrade.mvp.trade_index.TradeIndexActivity.activeOrder;
+
 public class TradeRecordActivity extends BaseActivity implements View.OnClickListener, TradeRecordView {
     private ViewPager vpTradeRecord;
     private LinearLayout llNotCompeleteOrder, llCompeleteOrder;
@@ -51,6 +55,7 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
     private PullToRefreshListView lvTradeRecord;
     private BeanOrderRecord orderRecordCompele;
     private CustomProgressBar cpbNetworkError;
+    private String TAG=SystemUtil.getTAG(this.getClass());
     /**
      * 未完成的订单
      */
@@ -63,7 +68,8 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
      */
     private String symbol;
     private TradeRecordPresenterCompl mTradeRecordPresenterCompl;
-
+    //服务器现在时间
+    private Long currentServerTime ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,13 +101,21 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initData() {
+
+    }
+
+    /**
+     * 判断是否过期,是否是显示数据
+     */
+    private void showSmallProgressBars(){
         if(TextUtils.isEmpty(symbol)){
-           Set<Integer> tickets = activeOrder.keySet();
+            Log.i(TAG, "showSmallProgressBars: 时间"+currentServerTime);
+            Set<Integer> tickets = activeOrder.keySet();
             List<Integer> deleteList=new ArrayList<>();
             for (Integer ticket : tickets){
                 BeanOrderResult order = activeOrder.get(ticket);
                 if (order != null) {
-                    long timeLeft = (System.currentTimeMillis() -
+                    long timeLeft = (currentServerTime -
                             TimeUtils.getOrderStartTimeNoTimeZone(order.getOpen_time()))/1000;//秒
                     if (timeLeft >= order.getTime_span()) {//当前时间大于到期时间，说明已经结账，要删除
 //                        activeOrder.remove(order.getTicket());
@@ -116,7 +130,8 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
             for(Integer delete:deleteList){
                 activeOrder.remove(delete);
             }
-         }
+        }
+        initNotCompeleteOrders();
     }
 
     @Override
@@ -141,6 +156,17 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
     }
 
     /**
+     * 获取系统时间
+     * @param beanServerTime
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetCurrentServerTime(BeanServerTime beanServerTime){
+        if(beanServerTime!=null){
+            currentServerTime = TimeUtils.getOrderStartTimeNoTimeZone(beanServerTime.getTime());
+        }
+        showSmallProgressBars();
+    }
+    /**
      * 获取未完成订单
      * @param smallProgressBars
      */
@@ -154,6 +180,7 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
                 mTradeRecordPresenterCompl.subscribeNewSymbol(orderResult, symbol);
             }
         }
+        //注意,有争议
         this.smallProgressBars = smallProgressBars;
         initNotCompeleteOrders();
         EventBus.getDefault().removeStickyEvent(smallProgressBars);
@@ -202,7 +229,7 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    @Subscribe(sticky = true, priority = 1)
+    @Subscribe(sticky = true, priority = 10)
     public void onGetHistoryData(Handler handlerRead) {//获取session操作和订阅历史数据
         if (!SystemUtil.isAvalidNetSetting(this)) {
             return;
@@ -212,6 +239,7 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
         }else {
 //            mTradeRecordPresenterCompl.setHandler(sslSocketChannel);
         }
+        mTradeRecordPresenterCompl.getServerTime("{\"msg_type\":280}");
 //        if(mScreenReceiver==null){
 //            startScreenBroadcastReceiver(handlerRead);
 //        }else {

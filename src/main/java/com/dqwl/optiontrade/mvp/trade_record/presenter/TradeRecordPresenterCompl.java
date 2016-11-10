@@ -6,6 +6,7 @@ import android.os.Message;
 import com.dqwl.optiontrade.bean.BeanOrderResult;
 import com.dqwl.optiontrade.mvp.trade_record.view.TradeRecordView;
 import com.dqwl.optiontrade.util.SSLSOCKET.SSLSocketChannel;
+import com.dqwl.optiontrade.util.SystemUtil;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class TradeRecordPresenterCompl implements ITradeRecordPresenter{
     private Map<String, Integer> symbolNotCompelete = new HashMap<>();
     private SSLSocketChannel<String> mSSLSocketChannel;
     private Handler mHandler;
+    private String TAG= SystemUtil.getTAG(this.getClass());
 
     public TradeRecordPresenterCompl(TradeRecordView tradeRecordView
             , Handler handlerRead) {
@@ -50,6 +52,9 @@ public class TradeRecordPresenterCompl implements ITradeRecordPresenter{
         Message message = new Message();
         message.obj = (data);
         mHandler.sendMessage(message);
+    }
+    public void getServerTime(String order){
+        sendMessageToServer(order);
     }
 
     @Override

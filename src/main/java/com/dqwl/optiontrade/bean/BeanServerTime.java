@@ -2,7 +2,8 @@ package com.dqwl.optiontrade.bean;
 
 /**
  * Created by jimda on 2016/10/17.
- * @link BeanServerTime #getServerTime
+ * @link MinaTimeChartActivity #getServerTime
+ * @link TradeIndexActivity  #onGetCurrentServerTime
  */
 
 public class BeanServerTime {
