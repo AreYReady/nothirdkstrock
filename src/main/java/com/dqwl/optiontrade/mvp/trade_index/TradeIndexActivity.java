@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,8 +18,10 @@ import com.dqwl.optiontrade.R;
 import com.dqwl.optiontrade.adapter.RealTimeAdapter;
 import com.dqwl.optiontrade.application.OptionApplication;
 import com.dqwl.optiontrade.base.BaseActivity;
+import com.dqwl.optiontrade.bean.BeanCurrentServerTime;
 import com.dqwl.optiontrade.bean.BeanOrderRecord;
 import com.dqwl.optiontrade.bean.BeanOrderResult;
+import com.dqwl.optiontrade.bean.BeanServerTime;
 import com.dqwl.optiontrade.bean.BeanSymbolConfig;
 import com.dqwl.optiontrade.bean.EventBusAllSymbol;
 import com.dqwl.optiontrade.bean.EventBusEvent;
@@ -37,6 +40,7 @@ import com.dqwl.optiontrade.util.CacheUtil;
 import com.dqwl.optiontrade.util.SSLSOCKET.SSLDecoderImp;
 import com.dqwl.optiontrade.util.SSLSOCKET.SSLSocketChannel;
 import com.dqwl.optiontrade.util.SystemUtil;
+import com.dqwl.optiontrade.util.TimeUtils;
 import com.dqwl.optiontrade.widget.CustomProgressBar;
 import com.dqwl.optiontrade.widget.TopActionBar;
 import com.google.gson.Gson;
@@ -65,6 +69,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
     private LinearLayout llNetworkErrorContainer;//没有网络时候的布局
     private CustomProgressBar cpbNetworkError;//网络重新连接进图条
     private LinearLayout llBottomTab;
+    private String TAG=SystemUtil.getTAG(this);
     /**
      * 所有symbole列表
      */
@@ -265,6 +270,18 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
                 activeOrder.put(orderResult.getTicket(), orderResult);
             }
         }
+    }
+    /**
+     * 封装服务器时间
+     * @param beanServerTime
+     */
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void getServerTime(BeanServerTime beanServerTime){
+        BeanCurrentServerTime.getInstance(TimeUtils
+                .getOrderStartTimeNoTimeZone(beanServerTime.getTime()))
+                .getCurrentServerTime();
+
+        Log.i(TAG, "getServerTime: "+ TimeUtils.getOrderStartTimeNoTimeZone(beanServerTime.getTime()));
     }
 
     /**

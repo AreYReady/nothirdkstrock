@@ -14,6 +14,7 @@ import com.dqwl.optiontrade.bean.BeanSubscrible;
 import com.dqwl.optiontrade.bean.HistoryDataList;
 import com.dqwl.optiontrade.handler.HandlerSend;
 import com.dqwl.optiontrade.mvp.time_chart_show.view.ITimeChartShowView;
+import com.dqwl.optiontrade.mvp.trade_index.TradeIndexActivity;
 import com.dqwl.optiontrade.util.CacheUtil;
 import com.dqwl.optiontrade.util.ChartUtils;
 import com.dqwl.optiontrade.util.MoneyUtil;
@@ -108,6 +109,7 @@ public class TimeChartShowPresenterCompl implements ITimeChartShowPresenter{
                     }
             }
         }
+        TradeIndexActivity.activeOrder=activeOrder;
         mTimeChartShowView.setBadgeNum(activeOrder.size());
     }
 

@@ -101,7 +101,7 @@ public class SSLDecoderImp implements Decoder<String> {
                 case MessageType.TYPE_BINARY_TRADE_NOTIFY://订单通知结果
                     EventBus.getDefault().post(new DataEvent(resultMessage, MessageType.TYPE_BINARY_TRADE_NOTIFY));
                     Log.i(TAG, "handleResult:订单通知结果=  "+resultMessage);
-                    break;
+                break;
                 case MessageType.TYPE_BINARY_REAL_TIME_LIST://发送实时数据
                     RealTimeDataList realTimeDataList = new Gson().fromJson(resultMessage, RealTimeDataList.class);
                     Log.i(TAG, "handleResult:发送实时数据=  "+resultMessage);
@@ -112,7 +112,7 @@ public class SSLDecoderImp implements Decoder<String> {
                     EventBus.getDefault().post(new DataEvent(resultMessage, MessageType.TYPE_BINARY_HISTORY_LIST));
                     Log.i("123", "handleResult: historyffffff");
                     break;
-                case MessageType.TYPE_BINARY_ORDER_RESPONSE:
+                case MessageType.TYPE_BINARY_ORDER_RESPONSE://下订单是否成功
                     Log.i(TAG, "handleResult:TYPE_BINARY_ORDER_RESPONSE=  "+resultMessage);
                     BeanOrderResponse orderResponse = new Gson().fromJson(resultMessage, BeanOrderResponse.class);
                     EventBus.getDefault().post(orderResponse);

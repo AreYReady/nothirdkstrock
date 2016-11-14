@@ -18,6 +18,7 @@ import com.dqwl.optiontrade.adapter.TradeRecordNotCompelteAdapter;
 import com.dqwl.optiontrade.adapter.TradeTypeAdapter;
 import com.dqwl.optiontrade.application.OptionApplication;
 import com.dqwl.optiontrade.base.BaseActivity;
+import com.dqwl.optiontrade.bean.BeanCurrentServerTime;
 import com.dqwl.optiontrade.bean.BeanOrderRecord;
 import com.dqwl.optiontrade.bean.BeanOrderResult;
 import com.dqwl.optiontrade.bean.BeanServerTime;
@@ -101,7 +102,7 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void initData() {
-
+        showSmallProgressBars();
     }
 
     /**
@@ -109,9 +110,10 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
      */
     private void showSmallProgressBars(){
         if(TextUtils.isEmpty(symbol)){
-            Log.i(TAG, "showSmallProgressBars: 时间"+currentServerTime);
             Set<Integer> tickets = activeOrder.keySet();
             List<Integer> deleteList=new ArrayList<>();
+            currentServerTime= BeanCurrentServerTime.instance.getCurrentServerTime();
+            Log.i(TAG, "showSmallProgressBars: 时间"+currentServerTime);
             for (Integer ticket : tickets){
                 BeanOrderResult order = activeOrder.get(ticket);
                 if (order != null) {
@@ -131,8 +133,51 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
                 activeOrder.remove(delete);
             }
         }
+//        //清空smallP...数据,将保存未完成订单的全局变量activeOrder装载去显示
+//        this.smallProgressBars.clear();
+//        long currentServerTime = BeanCurrentServerTime.instance.getCurrentServerTime();
+//        long oldLeftTime,time;
+//        long oldServerTime=BeanCurrentServerTime.instance.getCurrentServerTime();
+//        int maxDegrees;
+//        int mDegrees;
+//        List<Integer> ticketList=new ArrayList<>();
+//        for(Integer key:activeOrder.keySet()){
+//            //现在服务器的时间 - 记录数据时的服务器时间> 记录数据时的订单的剩余时间
+//            BeanOrderResult beanOrderResult = activeOrder.get(key);
+//            oldLeftTime = beanOrderResult.getLeft_time();
+//            if(beanOrderResult!=null){
+//                time = currentServerTime - oldServerTime;
+//                if(currentServerTime-oldServerTime>oldLeftTime){
+//                    ticketList.add(beanOrderResult.getTicket());
+//                }else{
+//                    maxDegrees=(int)(time+oldLeftTime)/1000;
+//                    mDegrees=(int)(oldLeftTime-time)/1000;
+//                    Log.i(TAG, "showSmallProgressBars: maxDegrees: "+maxDegrees+"   mDegrees: "+mDegrees);
+//                    SmallProgressBar small=new SmallProgressBar(this,maxDegrees,beanOrderResult);
+//                    small.setDegress();
+//                    smallProgressBars.add(small);
+////                    small.set
+//                }
+//            }
+//        }
+//        for(Integer ticket:ticketList){
+//            activeOrder.remove(ticket);
+//        }
+
+//        smallProgressBars=new SmallProgressBar()
+//
+//        for(int i=0;i<=activeOrder.size();i++){
+//
+//        }
+//        Iterator<Integer> iterator = activeOrder.keySet().iterator();
+//        Map.Entry entry = iterator.next();
+//        System.out.println(entry.getKey()+":"+entry.getValue());
+//        smallProgressBars.add(new SmallProgressBar().setDegress();)
+
         initNotCompeleteOrders();
+
     }
+
 
     @Override
     protected void initRegister() {
@@ -161,10 +206,10 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetCurrentServerTime(BeanServerTime beanServerTime){
-        if(beanServerTime!=null){
-            currentServerTime = TimeUtils.getOrderStartTimeNoTimeZone(beanServerTime.getTime());
-        }
-        showSmallProgressBars();
+//        if(beanServerTime!=null){
+//            currentServerTime = TimeUtils.getOrderStartTimeNoTimeZone(beanServerTime.getTime());
+//        }
+//        showSmallProgressBars();
     }
     /**
      * 获取未完成订单
@@ -176,6 +221,7 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
             BeanOrderResult orderResult = smallProgressBar.getOrder();
             if(smallProgressBar.getmDegree()<=0){
                 smallProgressBars.remove(smallProgressBar);
+//                activeOrder.remove(orderResult.getTicket());//保持数据统一
             }else {
                 mTradeRecordPresenterCompl.subscribeNewSymbol(orderResult, symbol);
             }
@@ -239,7 +285,7 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
         }else {
 //            mTradeRecordPresenterCompl.setHandler(sslSocketChannel);
         }
-        mTradeRecordPresenterCompl.getServerTime("{\"msg_type\":280}");
+//        mTradeRecordPresenterCompl.getServerTime("{\"msg_type\":280}");
 //        if(mScreenReceiver==null){
 //            startScreenBroadcastReceiver(handlerRead);
 //        }else {

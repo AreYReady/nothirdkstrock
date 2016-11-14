@@ -171,6 +171,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
     public void onGetAllSymbol(EventBusAllSymbol allSymbol) {
         startActivity(new Intent(LoginActivity.this, TradeIndexActivity.class)
                 .putParcelableArrayListExtra(ALL_SYMBOL, allSymbol.getItems()));
+
         Log.i("123", "onGetAllSymbol: 被执行了");
         LoginActivity.this.finish();
     }

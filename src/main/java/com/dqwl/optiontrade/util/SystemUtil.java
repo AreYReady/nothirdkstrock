@@ -140,4 +140,7 @@ public class SystemUtil {
     public static String getTAG(Class className){
         return "hsc : "+ className.getSimpleName();
     }
+    public static String getTAG(Object object){
+        return "hsc : "+ object.getClass().getSimpleName();
+    }
 }

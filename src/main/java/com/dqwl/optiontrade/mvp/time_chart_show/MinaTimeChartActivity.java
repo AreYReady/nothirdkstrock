@@ -81,6 +81,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.dqwl.optiontrade.mvp.trade_index.TradeIndexActivity.activeOrder;
 import static com.dqwl.optiontrade.util.MoneyUtil.addPrice;
 
 public class MinaTimeChartActivity extends BaseActivity implements View.OnClickListener,ITimeChartShowView {
@@ -88,6 +89,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
      * 进度条指示器高度
      */
     private static final int IMAGE_INDECATOR_HEIGHT = 24;
+    private String TAG=SystemUtil.getTAG(this.getClass());
     /**
      * 从服务器获取多少个数据，默认为60个
      */
@@ -155,7 +157,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     private ImageView ivOpenDirectionPopOrder;
 
     private TextView tvNowPrice;
-    private MultiDirectionSlidingDrawer slidingDrawer;
+    private MultiDirectionSlidingDrawer slidingDrawer;//侧拉账户信息
     /**
      * 下单确认倒计时
      */
@@ -263,6 +265,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(SystemUtil.getTAG(this.getClass()), "onCreate: 执行了");
     }
 
     @Override
@@ -358,11 +361,12 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
             }
         });
         tvNowPrice = ((NowPriceLine)timeChart.getChildAt(0)).getNowPriceTextview();
+        initOrerPopup();
     }
 
     @Override
     protected void initData() {
-        initOrerPopup();
+//        mTimeChartShowPresenter
     }
 
     @Override
@@ -597,7 +601,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
     @Subscribe(sticky = true, priority = 1, threadMode = ThreadMode.MAIN)
     public void onGetSSLSocketChannel(Handler handlerRead) {//获取session操作和检查缓存订阅历史数据
-        Log.i("123", "onGetSSLSocketChannel: ccccccccc");
+        Log.i(TAG, "onGetSSLSocketChannel: ccccccccc");
         if (!SystemUtil.isAvalidNetSetting(this)) {
             return;
         }
@@ -623,7 +627,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         mTimeChartShowPresenter.getUsrInfo(this);
         checkChartCache(symbolPosition,false);
         mTimeChartShowPresenter.getActiveOrder(
-                TradeIndexActivity.activeOrder, timeOffset, smallProgressBars.size()>0);//大于0的话，说明已经处理过了。或者没有退出该页面
+                activeOrder, timeOffset, smallProgressBars.size()>0);//大于0的话，说明已经处理过了。或者没有退出该页面
         if(popupWindowLoading!=null){
             popupWindowLoading.dismiss();
         }
@@ -827,7 +831,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDrawHistroyData(DataEvent dataEvent) {
-        Log.i("123", "onDrawHistroyData: fffff");
+        Log.i(TAG, "onDrawHistroyData: fffff");
         HistoryDataList dataList;
         if (dataEvent.getType() == MessageType.TYPE_BINARY_HISTORY_LIST) {//绘制历史数据
             dataList = new Gson().fromJson(dataEvent.getResult(), new TypeToken<HistoryDataList>() {
@@ -873,6 +877,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        Log.i(TAG, "onDestroy: activeOrder.size"+TradeIndexActivity.activeOrder.size());
         if(mTimeChartShowPresenter!=null) {
             mTimeChartShowPresenter.onDestroy(this);
         }
@@ -902,6 +907,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
             case R.id.topActionButton1:
                 startActivityForResult(new Intent(this, TradeRecordActivity.class)
                         .putExtra(SYMBOL, allSubscribeSymbols.get(symbolPosition).getSymbol()), NOT_COMPLETE_ORDER);
+                activeOrder.size();
                 EventBus.getDefault().postSticky(smallProgressBars);//传递当前的进度条
                 break;
             case R.id.iv_switch_chart:
@@ -1104,7 +1110,8 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     public void onOrderResult(DataEvent dataEvent) {
         if (dataEvent.getType() == MessageType.TYPE_BINARY_TRADE_NOTIFY) {
             BeanOrderResult orderResult = new Gson().fromJson(dataEvent.getResult(), BeanOrderResult.class);
-            if (orderResult.getResult() > 0) {//有结果数据，下单结果
+            if (orderResult.getResult() > 0) {
+                //有结果数据，下单结果
                 for (final SmallProgressBar progressBar : smallProgressBars) {
                     BeanOrderResult order = progressBar.getOrder();
                     if (order.getTicket() == orderResult.getTicket()) {
@@ -1128,12 +1135,12 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
                                 smallProgressBars.remove(progressBar);
                             }
                         }, 1000);
-                        TradeIndexActivity.activeOrder.remove(order.getTicket());
+                        activeOrder.remove(order.getTicket());
                         EventBus.getDefault().post(-1);//下单结果后角标-1
                     }
                 }
             } else {//下单成功后添加进度条，并且写入sp，没有result就是刚下单成功后返回的下单详情
-                TradeIndexActivity.activeOrder.put(orderResult.getTicket(), orderResult);
+                activeOrder.put(orderResult.getTicket(), orderResult);
                 EventBus.getDefault().post(1);//下单结果后角标+1
                 addProgressBar(orderResult, orderResult.getTime_span() - (3 - timeLeft));
                 String orderMoney = MoneyUtil.addPrice(tvMoneyLeft.getText().toString().substring(1)
@@ -1354,6 +1361,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "onDestroy: activeOrder.size"+TradeIndexActivity.activeOrder.size());
         if (requestCode == NOT_COMPLETE_ORDER) {//返回要重新设置角标，并且移除已经完成的订单
             for (final SmallProgressBar smallProgressBar : smallProgressBars) {
                 if (smallProgressBar.getmDegree()
@@ -1361,10 +1369,10 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
                     mLineWrapLayout.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            TradeIndexActivity.activeOrder.remove(smallProgressBar.getOrder().getTicket());
+                            activeOrder.remove(smallProgressBar.getOrder().getTicket());
                             mLineWrapLayout.removeView((View) smallProgressBar.getParent());
                             smallProgressBars.remove(smallProgressBar);
-                            topActionBar.setBadgeNum(TradeIndexActivity.activeOrder.size());
+                            topActionBar.setBadgeNum(activeOrder.size());
                         }
                     }, 200);
                 }

@@ -7,9 +7,11 @@ import android.os.Message;
 import com.dqwl.optiontrade.bean.BeanSymbolConfig;
 import com.dqwl.optiontrade.bean.EventBusAllSymbol;
 import com.dqwl.optiontrade.bean.RealTimeDataList;
+import com.dqwl.optiontrade.constant.MessageType;
 import com.dqwl.optiontrade.handler.HandlerSend;
 import com.dqwl.optiontrade.mvp.trade_index.view.ITradeIndexView;
 import com.dqwl.optiontrade.util.CacheUtil;
+import com.dqwl.optiontrade.util.SystemUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
     private ArrayList<BeanSymbolConfig.SymbolsBean> realTimeDatas = new ArrayList<>();//实时数据
     private ArrayList<BeanSymbolConfig.SymbolsBean> realTimeDatasTemp = new ArrayList<>();//保存实时数据，以便恢复
     private Handler mHandler;
+    private String TAG= SystemUtil.getTAG(this);
 
     public TradeIndexPresenterCompl(ITradeIndexView tradeIndexView) {
         mTradeIndexView = tradeIndexView;
@@ -40,6 +43,7 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
     private void sendHeartBeat(){
         if(mHandler!=null){
 //            mHandler.post(heartBeatRunnable);
+            sendMessageToServer(MessageType.TYPE_ORDER_SREVER_TIME);
         }
     }
 
@@ -106,6 +110,8 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
             }
     }
 
+
+
     @Override
     public void subscribleFavorSymbole(Context context) {
         realTimeDatasTemp.clear();
@@ -156,7 +162,9 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
         unSubscribeSymbol("");
         releaseSession();
     }
-
+//    @Subscribe(threadMode = ThreadMode.BACKGROUND){
+//
+//    }
     @Override
     public void setHandler(Handler handler) {
         if(mHandler!=null){
@@ -170,4 +178,5 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
     public void connectToMinaServer() {
         mHandler.sendEmptyMessage(HandlerSend.CONNECT);
     }
+
 }
