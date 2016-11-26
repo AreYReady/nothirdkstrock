@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -51,8 +53,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -298,14 +302,51 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
      *
      * @param symbolShow
      */
+    private String nameHander;
+    private Handler mHandler;
+
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onGetSymbolShow(BeanSymbolConfig symbolShow) {
         OptionApplication.symbolShow = symbolShow;
         ArrayList<BeanSymbolConfig.SymbolsBean> realTimeDatas
                 = mTradeIndexPresenterCompl.writeRealTimeData(symbolShow.getSymbols(), allSymbol);
-        Map<String, BeanChangePercent> mBeanChangePercentMap = mTradeIndexPresenterCompl.writePercentTimeData(symbolShow.getSymbols());
-        //定时器,轮训这个数组,做操作.
+        final Map<String, BeanChangePercent> mBeanChangePercentMap = mTradeIndexPresenterCompl.writePercentTimeData(symbolShow.getSymbols());
+        HandlerThread handlerThread = new HandlerThread("nameHander");
+        handlerThread.start();
 
+
+        mHandler = new Handler(handlerThread.getLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                //注意,偏移量的理解可能有误,如果换服务器后台的话,到时候要测试下
+                //修正,treemap不能存储重复的值,所以,map<String,List<BeanChangePercent>>
+                String deletekey;
+                Map.Entry<String, BeanChangePercent> next;
+                long currentTime;
+                long keyTime;
+                Iterator<Map.Entry<String, BeanChangePercent>> iterator = mBeanChangePercentMap.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    next = iterator.next();
+                    try {
+                        long l = TimeUtils.stringToLong(TimeUtils.getCurrentTimeNoS(), "hh:mm")-TimeUtils.stringToLong(next.getKey(), "hh:mm");
+                        if ( l>=0) {
+                            EventBus.getDefault().post(next);
+                            deletekey = next.getKey();
+                        }else{
+                            //获取本地时间和第一个集合对比计算出相差的时间,休眠.
+
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+                }
+            }
+        };
+        //定时器,轮训这个数组,做操作.将数据发送到MinaTimeChartActivity里面区做操作
+        EventBus.getDefault().post(mBeanChangePercentMap);
         vol_max = symbolShow.getVol_max();
         vol_min = symbolShow.getVol_min();
         step_min = symbolShow.getStep_min();
@@ -348,7 +389,6 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
         if (mTradeIndexPresenterCompl != null)
             mTradeIndexPresenterCompl.onDestroy();
     }
-
 
 
     @Override

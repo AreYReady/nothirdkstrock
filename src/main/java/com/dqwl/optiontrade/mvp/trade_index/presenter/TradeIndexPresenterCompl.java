@@ -184,20 +184,22 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
     @Override
     public Map<String, BeanChangePercent> writePercentTimeData(List<BeanSymbolConfig.SymbolsBean> symbolShow) {
         Map<String,BeanChangePercent> mBeanChangePercents= new TreeMap<>();
-//        BeanChangePercent mBeanChangePercent=new BeanChangePercent();
-//        for(BeanSymbolConfig.SymbolsBean symbol:symbolShow) {
-//            mBeanChangePercent.setTz_delta(symbol.getTz_delta());
-//            mBeanChangePercent.setSymbol(symbol.getSymbol());
-//            for (BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean : symbol.getCycles()) {
-//                mBeanChangePercent.setPercent(cyclesBean.getPercent());
-//                //加入改变时间
-//                mBeanChangePercent.setType(0);
-//                mBeanChangePercents.put(cyclesBean.getTimes().getB(), mBeanChangePercent);
-//                mBeanChangePercent.setType(1);
-//                //加入消失时间
-//                mBeanChangePercents.put(cyclesBean.getTimes().getE(), mBeanChangePercent);
-//            }
-//        }
+        BeanChangePercent mBeanChangePercent=new BeanChangePercent();
+        for(BeanSymbolConfig.SymbolsBean symbol:symbolShow) {
+            mBeanChangePercent.setTz_delta(symbol.getTz_delta());
+            mBeanChangePercent.setSymbol(symbol.getSymbol());
+            for (BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean : symbol.getCycles()) {
+                mBeanChangePercent.setPercent(cyclesBean.getPercent());
+                //加入改变时间
+                mBeanChangePercent.setType(0);
+                if(cyclesBean.getTimes()!=null) {
+                    mBeanChangePercents.put(cyclesBean.getTimes().get(0).getB(), mBeanChangePercent);
+                    mBeanChangePercent.setType(1);
+                    //加入消失时间
+                    mBeanChangePercents.put(cyclesBean.getTimes().get(0).getE(), mBeanChangePercent);
+                }
+            }
+        }
         return mBeanChangePercents;
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -279,6 +280,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         vol_min = getIntent().getIntExtra(TradeIndexActivity.VOL_MIN, 0);
         step_min = getIntent().getIntExtra(TradeIndexActivity.STEP_MIN, 0);
         bailMoneyList = new ArrayList<>();
+
         SoundManager.initSoundManager(this);
     }
 
@@ -445,7 +447,6 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         String bailMoneyStr = tvBailMoney.getText().toString().substring(1);
         double bailMoney = Double.valueOf(bailMoneyStr);
         tvMoneyWin.setText((bailMoney*percent/100) +"");
-
         BeanSymbolConfig.SymbolsBean symbolsBean = allSubscribeSymbols.get(symbolPosition);
         if(symbolsBean.getVol_min()>0){
             vol_min = symbolsBean.getVol_min();
@@ -471,6 +472,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         }
         tvBailMoney.setText("$" + vol_min);
         tvBailMoney.setTag(0);
+
     }
 
     /**
@@ -630,7 +632,15 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         if(popupWindowLoading!=null){
             popupWindowLoading.dismiss();
         }
+
     }
+    private Handler handler=new Handler(){
+        @Override
+        public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
+            return super.sendMessageAtTime(msg, uptimeMillis);
+        }
+    };
+
     private CountDownTimer countDownTimer;
     private long time;
     @Subscribe(threadMode = ThreadMode.MAIN)

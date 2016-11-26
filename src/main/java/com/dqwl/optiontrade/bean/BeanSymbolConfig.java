@@ -94,15 +94,15 @@ public class BeanSymbolConfig {
         private String symbol;
         private int vol_max;
         private int vol_min;
-//        private int tz_delta;
+        private int tz_delta;
 
-//        public int getTz_delta() {
-//            return tz_delta;
-//        }
-//
-//        public void setTz_delta(int tz_delta) {
-//            this.tz_delta = tz_delta;
-//        }
+        public int getTz_delta() {
+            return tz_delta;
+        }
+
+        public void setTz_delta(int tz_delta) {
+            this.tz_delta = tz_delta;
+        }
 
         private int flag;
         private float productPrice;
@@ -190,15 +190,17 @@ public class BeanSymbolConfig {
             private int cycle;
             private String desc;
             private int percent;
-//            private Times times;
-//
-//            public Times getTimes() {
-//                return times;
-//            }
-//
-//            public void setTimes(Times times) {
-//                this.times = times;
-//            }
+
+            public List<Times> getTimes() {
+                return times;
+            }
+
+            public void setTimes(List<Times> times) {
+                this.times = times;
+            }
+
+            private List<Times> times;
+
 
             public int getCycle() {
                 return cycle;
@@ -224,26 +226,26 @@ public class BeanSymbolConfig {
                 this.percent = percent;
             }
 
-//            public static class Times {
-//                private String b;
-//                private String e;
-//
-//                public String getB() {
-//                    return b;
-//                }
-//
-//                public void setB(String b) {
-//                    this.b = b;
-//                }
-//
-//                public String getE() {
-//                    return e;
-//                }
-//
-//                public void setE(String e) {
-//                    this.e = e;
-//                }
-//            }
+            public static class Times {
+                private String b;
+                private String e;
+
+                public String getB() {
+                    return b;
+                }
+
+                public void setB(String b) {
+                    this.b = b;
+                }
+
+                public String getE() {
+                    return e;
+                }
+
+                public void setE(String e) {
+                    this.e = e;
+                }
+            }
         }
 
     }
