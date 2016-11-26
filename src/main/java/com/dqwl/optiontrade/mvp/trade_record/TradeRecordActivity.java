@@ -47,7 +47,6 @@ import java.util.Set;
 
 import static com.dqwl.optiontrade.mvp.trade_index.TradeIndexActivity.activeOrder;
 
-//import static com.dqwl.optiontrade.mvp.trade_index.TradeIndexActivity.activeOrder;
 
 public class TradeRecordActivity extends BaseActivity implements View.OnClickListener, TradeRecordView {
     private ViewPager vpTradeRecord;
@@ -57,6 +56,7 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
     private BeanOrderRecord orderRecordCompele;
     private CustomProgressBar cpbNetworkError;
     private String TAG=SystemUtil.getTAG(this.getClass());
+
     /**
      * 未完成的订单
      */
@@ -131,6 +131,7 @@ public class TradeRecordActivity extends BaseActivity implements View.OnClickLis
 
             for(Integer delete:deleteList){
                 activeOrder.remove(delete);
+                Log.i(TAG, "showSmallProgressBars:  activeOrder.remove(delete); ");
             }
         }
 //        //清空smallP...数据,将保存未完成订单的全局变量activeOrder装载去显示

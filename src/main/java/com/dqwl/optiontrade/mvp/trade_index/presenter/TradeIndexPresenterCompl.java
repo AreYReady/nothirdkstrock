@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
+import com.dqwl.optiontrade.bean.BeanChangePercent;
 import com.dqwl.optiontrade.bean.BeanSymbolConfig;
 import com.dqwl.optiontrade.bean.EventBusAllSymbol;
 import com.dqwl.optiontrade.bean.RealTimeDataList;
@@ -15,6 +16,8 @@ import com.dqwl.optiontrade.util.SystemUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author xjunda
@@ -26,6 +29,8 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
     private ArrayList<BeanSymbolConfig.SymbolsBean> realTimeDatasTemp = new ArrayList<>();//保存实时数据，以便恢复
     private Handler mHandler;
     private String TAG= SystemUtil.getTAG(this);
+
+
 
     public TradeIndexPresenterCompl(ITradeIndexView tradeIndexView) {
         mTradeIndexView = tradeIndexView;
@@ -75,6 +80,8 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
         }
         return realTimeDatas;
     }
+
+
 
     private void sendMessageToServer(String data) {
         Message message = new Message();
@@ -172,6 +179,26 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
         }
         mHandler = handler;
         sendHeartBeat();
+    }
+
+    @Override
+    public Map<String, BeanChangePercent> writePercentTimeData(List<BeanSymbolConfig.SymbolsBean> symbolShow) {
+        Map<String,BeanChangePercent> mBeanChangePercents= new TreeMap<>();
+//        BeanChangePercent mBeanChangePercent=new BeanChangePercent();
+//        for(BeanSymbolConfig.SymbolsBean symbol:symbolShow) {
+//            mBeanChangePercent.setTz_delta(symbol.getTz_delta());
+//            mBeanChangePercent.setSymbol(symbol.getSymbol());
+//            for (BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean : symbol.getCycles()) {
+//                mBeanChangePercent.setPercent(cyclesBean.getPercent());
+//                //加入改变时间
+//                mBeanChangePercent.setType(0);
+//                mBeanChangePercents.put(cyclesBean.getTimes().getB(), mBeanChangePercent);
+//                mBeanChangePercent.setType(1);
+//                //加入消失时间
+//                mBeanChangePercents.put(cyclesBean.getTimes().getE(), mBeanChangePercent);
+//            }
+//        }
+        return mBeanChangePercents;
     }
 
     @Override

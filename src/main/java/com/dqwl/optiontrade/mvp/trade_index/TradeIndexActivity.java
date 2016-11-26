@@ -18,6 +18,7 @@ import com.dqwl.optiontrade.R;
 import com.dqwl.optiontrade.adapter.RealTimeAdapter;
 import com.dqwl.optiontrade.application.OptionApplication;
 import com.dqwl.optiontrade.base.BaseActivity;
+import com.dqwl.optiontrade.bean.BeanChangePercent;
 import com.dqwl.optiontrade.bean.BeanCurrentServerTime;
 import com.dqwl.optiontrade.bean.BeanOrderRecord;
 import com.dqwl.optiontrade.bean.BeanOrderResult;
@@ -37,6 +38,7 @@ import com.dqwl.optiontrade.mvp.trade_index.presenter.TradeIndexPresenterCompl;
 import com.dqwl.optiontrade.mvp.trade_index.view.ITradeIndexView;
 import com.dqwl.optiontrade.mvp.trade_record.TradeRecordActivity;
 import com.dqwl.optiontrade.util.CacheUtil;
+import com.dqwl.optiontrade.util.NoCompleteActiveOrder;
 import com.dqwl.optiontrade.util.SSLSOCKET.SSLDecoderImp;
 import com.dqwl.optiontrade.util.SSLSOCKET.SSLSocketChannel;
 import com.dqwl.optiontrade.util.SystemUtil;
@@ -52,6 +54,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 登入之后的显示交易类型的页面
@@ -69,7 +72,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
     private LinearLayout llNetworkErrorContainer;//没有网络时候的布局
     private CustomProgressBar cpbNetworkError;//网络重新连接进图条
     private LinearLayout llBottomTab;
-    private String TAG=SystemUtil.getTAG(this);
+    private String TAG = SystemUtil.getTAG(this);
     /**
      * 所有symbole列表
      */
@@ -102,9 +105,11 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
      * 最小步进价格
      */
     private int step_min;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -125,9 +130,9 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
         lvRealTime.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(!isNetWorkAvalid())
+                if (!isNetWorkAvalid())
                     return;
-                if(llNetworkErrorContainer.isShown()){
+                if (llNetworkErrorContainer.isShown()) {
                     showToast(getString(R.string.reconnect_please));
                     return;
                 }
@@ -168,7 +173,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initData() {
-
+        NoCompleteActiveOrder.getSingleton().saveActiveOrder(activeOrder);
     }
 
     @Override
@@ -178,6 +183,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
 
     /**
      * 设置实时数据
+     *
      * @param realTimeDataList
      */
     private void showRealTimeData(RealTimeDataList realTimeDataList) {
@@ -197,38 +203,39 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
     }
 
     @Subscribe(sticky = true, priority = 1, threadMode = ThreadMode.MAIN)
-    public void getSocketChannel(Handler handlerRead){
-        if(mTradeIndexPresenterCompl==null){
+    public void getSocketChannel(Handler handlerRead) {
+        if (mTradeIndexPresenterCompl == null) {
             mTradeIndexPresenterCompl = new TradeIndexPresenterCompl(this, handlerRead);
-        }else {
+        } else {
             mTradeIndexPresenterCompl.setHandler(handlerRead);
         }
-        if(mScreenReceiver==null){
+        if (mScreenReceiver == null) {
             startScreenBroadcastReceiver(handlerRead);
-        }else {
+        } else {
             mScreenReceiver.setHandler(handlerRead);//原来的session已经关掉，要指向新的session
         }
-        if(SystemUtil.isTopActivity(this,getLocalClassName())){
+        if (SystemUtil.isTopActivity(this, getLocalClassName())) {
             mTradeIndexPresenterCompl.subscribeSymbol("");
         }
     }
 
     @Subscribe
-    public void onHeartHeat(String heatHeat){
-        if(heatHeat.equalsIgnoreCase(SSLDecoderImp.HEART_BEAT)){
+    public void onHeartHeat(String heatHeat) {
+        if (heatHeat.equalsIgnoreCase(SSLDecoderImp.HEART_BEAT)) {
             mTradeIndexPresenterCompl.responseHeartBeat();
         }
     }
 
     /**
      * 获取到实时数据
+     *
      * @param realTimeDataList
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetRealTimeData(RealTimeDataList realTimeDataList) {
 //        showRealTimeData(realTimeDataList);
         mTradeIndexPresenterCompl.showRealTimeData(realTimeDataList);
-        if(popupWindowLoading!=null){
+        if (popupWindowLoading != null) {
             popupWindowLoading.dismiss();
         }
     }
@@ -246,14 +253,14 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onTimeOut(String timeout){
-        if(timeout.equalsIgnoreCase(SSLSocketChannel.TIMEOUT)){
-            if(popupWindowLoading!=null)
+    public void onTimeOut(String timeout) {
+        if (timeout.equalsIgnoreCase(SSLSocketChannel.TIMEOUT)) {
+            if (popupWindowLoading != null)
                 popupWindowLoading.dismiss();
 
             showToast(R.string.net_or_server_error);
             llNetworkErrorContainer.setVisibility(View.VISIBLE);
-        }else if(timeout.equalsIgnoreCase(ScreenBroadcastReceiver.CONNECT)){
+        } else if (timeout.equalsIgnoreCase(ScreenBroadcastReceiver.CONNECT)) {
             mTradeIndexPresenterCompl.connectToMinaServer();
         }
     }
@@ -265,46 +272,52 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
      */
     @Subscribe(sticky = true)
     public void onGetActiviteOrder(BeanOrderRecord orderRecord) {
-        if(orderRecord!=null&&orderRecord.getOrders()!=null){
+        if (orderRecord != null && orderRecord.getOrders() != null) {
             for (BeanOrderResult orderResult : orderRecord.getOrders()) {
                 activeOrder.put(orderResult.getTicket(), orderResult);
             }
         }
     }
+
     /**
      * 封装服务器时间
+     *
      * @param beanServerTime
      */
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void getServerTime(BeanServerTime beanServerTime){
+    public void getServerTime(BeanServerTime beanServerTime) {
         BeanCurrentServerTime.getInstance(TimeUtils
                 .getOrderStartTimeNoTimeZone(beanServerTime.getTime()))
                 .getCurrentServerTime();
 
-        Log.i(TAG, "getServerTime: "+ TimeUtils.getOrderStartTimeNoTimeZone(beanServerTime.getTime()));
+        Log.i(TAG, "getServerTime: " + TimeUtils.getOrderStartTimeNoTimeZone(beanServerTime.getTime()));
     }
 
     /**
      * 获取要展示的产品
+     *
      * @param symbolShow
      */
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onGetSymbolShow(BeanSymbolConfig symbolShow){
+    public void onGetSymbolShow(BeanSymbolConfig symbolShow) {
         OptionApplication.symbolShow = symbolShow;
         ArrayList<BeanSymbolConfig.SymbolsBean> realTimeDatas
                 = mTradeIndexPresenterCompl.writeRealTimeData(symbolShow.getSymbols(), allSymbol);
+        Map<String, BeanChangePercent> mBeanChangePercentMap = mTradeIndexPresenterCompl.writePercentTimeData(symbolShow.getSymbols());
+        //定时器,轮训这个数组,做操作.
+
         vol_max = symbolShow.getVol_max();
         vol_min = symbolShow.getVol_min();
         step_min = symbolShow.getStep_min();
         if (realTimeAdapter == null) {
             realTimeAdapter = new RealTimeAdapter(this, realTimeDatas);
             lvRealTime.setAdapter(realTimeAdapter);
-        }else {
+        } else {
             EventBus.getDefault().post(realTimeDatas);
         }
 
 
-        if(popupWindowLoading!=null){
+        if (popupWindowLoading != null) {
             popupWindowLoading.dismiss();
         }
         llNetworkErrorContainer.setVisibility(View.GONE);
@@ -327,39 +340,34 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if(popupWindowLoading!=null){
+        if (popupWindowLoading != null) {
             popupWindowLoading.dismiss();
         }
-        if(mScreenReceiver!=null)
-        unregisterReceiver(mScreenReceiver);
-        if(mTradeIndexPresenterCompl!=null)
-        mTradeIndexPresenterCompl.onDestroy();
+        if (mScreenReceiver != null)
+            unregisterReceiver(mScreenReceiver);
+        if (mTradeIndexPresenterCompl != null)
+            mTradeIndexPresenterCompl.onDestroy();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(mTradeIndexPresenterCompl!=null){
-            mTradeIndexPresenterCompl.unSubscribeSymbol(nextSymbole);
-        }
-    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mTradeIndexPresenterCompl!=null){
+        if (mTradeIndexPresenterCompl != null) {
             mTradeIndexPresenterCompl.subscribeSymbol(nextSymbole);
         }
     }
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.networkErrorRefreshButton1:
-                if(!isNetWorkAvalid()){
+                if (!isNetWorkAvalid()) {
                     return;
                 }
-                if(mTradeIndexPresenterCompl==null){
+                if (mTradeIndexPresenterCompl == null) {
                     mTradeIndexPresenterCompl = new TradeIndexPresenterCompl(this);
                 }
                 showPopupLoading(cpbNetworkError);
@@ -445,7 +453,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
      * 接收锁屏广播
      */
     private void startScreenBroadcastReceiver(Handler handlerRead) {
-        mScreenReceiver = new ScreenBroadcastReceiver(this , handlerRead, cpbNetworkError);
+        mScreenReceiver = new ScreenBroadcastReceiver(this, handlerRead, cpbNetworkError);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 /**
  * @author xjunda
  * @date 2016-08-11
- * @link LoginActivity # onGetAllSymbol
  */
 public class EventBusAllSymbol implements Parcelable{
 

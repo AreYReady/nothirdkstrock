@@ -363,7 +363,6 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         tvNowPrice = ((NowPriceLine)timeChart.getChildAt(0)).getNowPriceTextview();
         initOrerPopup();
     }
-
     @Override
     protected void initData() {
 //        mTimeChartShowPresenter
@@ -901,13 +900,13 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 //        }
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.topActionButton1:
                 startActivityForResult(new Intent(this, TradeRecordActivity.class)
                         .putExtra(SYMBOL, allSubscribeSymbols.get(symbolPosition).getSymbol()), NOT_COMPLETE_ORDER);
-                activeOrder.size();
                 EventBus.getDefault().postSticky(smallProgressBars);//传递当前的进度条
                 break;
             case R.id.iv_switch_chart:
@@ -1052,9 +1051,11 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+
     /**
      * 显示订单对话框
      */
+
     private void showPopupOrder() {
         SoundManager.playCallPutSound();
         setConfirmOrderMessage();
@@ -1346,6 +1347,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (popupProgressbars != null && popupProgressbars.isShowing()) {
                 popupProgressbars.dismiss();
@@ -1361,7 +1363,6 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "onDestroy: activeOrder.size"+TradeIndexActivity.activeOrder.size());
         if (requestCode == NOT_COMPLETE_ORDER) {//返回要重新设置角标，并且移除已经完成的订单
             for (final SmallProgressBar smallProgressBar : smallProgressBars) {
                 if (smallProgressBar.getmDegree()
@@ -1369,7 +1370,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
                     mLineWrapLayout.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            activeOrder.remove(smallProgressBar.getOrder().getTicket());
+//                            activeOrder.remove(smallProgressBar.getOrder().getTicket());
                             mLineWrapLayout.removeView((View) smallProgressBar.getParent());
                             smallProgressBars.remove(smallProgressBar);
                             topActionBar.setBadgeNum(activeOrder.size());

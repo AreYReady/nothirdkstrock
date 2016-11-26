@@ -3,6 +3,7 @@ package com.dqwl.optiontrade.mvp.trade_index.presenter;
 import android.content.Context;
 import android.os.Handler;
 
+import com.dqwl.optiontrade.bean.BeanChangePercent;
 import com.dqwl.optiontrade.bean.BeanSymbolConfig;
 import com.dqwl.optiontrade.bean.EventBusAllSymbol;
 import com.dqwl.optiontrade.bean.RealTimeDataList;
@@ -10,6 +11,7 @@ import com.dqwl.optiontrade.mvp.baseMVPInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author xjunda
@@ -26,6 +28,6 @@ public interface ITradeIndexPresenter extends baseMVPInterface {
     void showRealTimeData(RealTimeDataList realTimeDataList);
     void responseHeartBeat();
     void onDestroy();
-
     void setHandler(Handler sslSocketChannel);
+    Map<String,BeanChangePercent> writePercentTimeData(List<BeanSymbolConfig.SymbolsBean> symbolShow);
 }

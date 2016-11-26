@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.dqwl.optiontrade.R;
 import com.dqwl.optiontrade.base.BaseActivity;
-import com.dqwl.optiontrade.bean.BeanOrderResult;
 import com.dqwl.optiontrade.bean.EventBusAllSymbol;
 import com.dqwl.optiontrade.bean.ResponseEvent;
 import com.dqwl.optiontrade.mvp.login.presenter.LoginPresenterCompl;
@@ -29,8 +28,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.HashMap;
-
 public class LoginActivity extends BaseActivity implements ILoginView {
     public static final String ACTIVEORDER = "ACTIVEORDER";
     public static final String ALL_SYMBOL = "allSymbol";
@@ -38,10 +35,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
     private EditText etUserName, etPassword;
     private LoginPresenterCompl mLoginPresenterCompl;
     private TextView mTextViewVersionName;
-    /**
-     * 未完成的订单
-     */
-    private HashMap<Integer, BeanOrderResult> activeOrder = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

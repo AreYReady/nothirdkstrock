@@ -6,6 +6,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 
+import com.dqwl.optiontrade.bean.BeanCurrentServerTime;
 import com.dqwl.optiontrade.bean.BeanHistoryRequest;
 import com.dqwl.optiontrade.bean.BeanOrder;
 import com.dqwl.optiontrade.bean.BeanOrderResult;
@@ -14,7 +15,6 @@ import com.dqwl.optiontrade.bean.BeanSubscrible;
 import com.dqwl.optiontrade.bean.HistoryDataList;
 import com.dqwl.optiontrade.handler.HandlerSend;
 import com.dqwl.optiontrade.mvp.time_chart_show.view.ITimeChartShowView;
-import com.dqwl.optiontrade.mvp.trade_index.TradeIndexActivity;
 import com.dqwl.optiontrade.util.CacheUtil;
 import com.dqwl.optiontrade.util.ChartUtils;
 import com.dqwl.optiontrade.util.MoneyUtil;
@@ -94,12 +94,13 @@ public class TimeChartShowPresenterCompl implements ITimeChartShowPresenter{
         for (Integer key : activeOrder.keySet()) {
             final BeanOrderResult order = activeOrder.get(key);
             if (order != null) {
-                    final long timeLeft = (System.currentTimeMillis() -
+                    final long timeLeft = (BeanCurrentServerTime.getInstance(1).getCurrentServerTime() -
                             TimeUtils.getOrderStartTimeNoTimeZone(order.getOpen_time()))/1000;//秒
                     if (timeLeft >= order.getTime_span()) {//当前时间大于到期时间，说明已经结账，要删除
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                Log.i("hsc", "run: activeOrder.remove(order.getTicket()");
                                 activeOrder.remove(order.getTicket());
                             }
                         }, 200);
@@ -109,7 +110,7 @@ public class TimeChartShowPresenterCompl implements ITimeChartShowPresenter{
                     }
             }
         }
-        TradeIndexActivity.activeOrder=activeOrder;
+//        TradeIndexActivity.activeOrder=activeOrder;
         mTimeChartShowView.setBadgeNum(activeOrder.size());
     }
 
