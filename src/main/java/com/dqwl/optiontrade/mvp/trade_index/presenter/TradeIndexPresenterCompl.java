@@ -10,6 +10,7 @@ import com.dqwl.optiontrade.bean.EventBusAllSymbol;
 import com.dqwl.optiontrade.bean.RealTimeDataList;
 import com.dqwl.optiontrade.constant.MessageType;
 import com.dqwl.optiontrade.handler.HandlerSend;
+import com.dqwl.optiontrade.mvp.trade_index.TradeIndexActivity;
 import com.dqwl.optiontrade.mvp.trade_index.view.ITradeIndexView;
 import com.dqwl.optiontrade.util.CacheUtil;
 import com.dqwl.optiontrade.util.SystemUtil;
@@ -186,7 +187,7 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
         Map<String,BeanChangePercent> mBeanChangePercents= new TreeMap<>();
         BeanChangePercent mBeanChangePercent=new BeanChangePercent();
         for(BeanSymbolConfig.SymbolsBean symbol:symbolShow) {
-            mBeanChangePercent.setTz_delta(symbol.getTz_delta());
+            mBeanChangePercent.setTz_delta(TradeIndexActivity.tz_detla);
             mBeanChangePercent.setSymbol(symbol.getSymbol());
             for (BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean : symbol.getCycles()) {
                 mBeanChangePercent.setPercent(cyclesBean.getPercent());

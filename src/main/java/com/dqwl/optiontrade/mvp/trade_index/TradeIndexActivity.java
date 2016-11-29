@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.dqwl.optiontrade.R;
 import com.dqwl.optiontrade.adapter.RealTimeAdapter;
-import com.dqwl.optiontrade.application.OptionApplication;
 import com.dqwl.optiontrade.base.BaseActivity;
 import com.dqwl.optiontrade.bean.BeanChangePercent;
 import com.dqwl.optiontrade.bean.BeanCurrentServerTime;
@@ -58,6 +57,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,6 +70,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
     public static final String VOL_MIN = "vol_min";
     public static final String VOL_MAX = "vol_max";
     public static final String STEP_MIN = "step_min";
+    public static final String TZ_DELTA = "tz_delta";
     private RealTimeAdapter realTimeAdapter;//实时适配器
     private ListView lvRealTime;
     private TopActionBar topActionBar;
@@ -77,6 +78,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
     private CustomProgressBar cpbNetworkError;//网络重新连接进图条
     private LinearLayout llBottomTab;
     private String TAG = SystemUtil.getTAG(this);
+    private BeanSymbolConfig symbolShow;
     /**
      * 所有symbole列表
      */
@@ -109,6 +111,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
      * 最小步进价格
      */
     private int step_min;
+    public static int tz_detla = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +150,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
                         .putExtra(TIMEOFFSET, timeOffset)
                         .putExtra(VOL_MIN, vol_min)
                         .putExtra(VOL_MAX, vol_max)
+                        .putExtra(TZ_DELTA, symbolShow.getTz_delta())
                         .putExtra(STEP_MIN, step_min));
                 EventBus.getDefault().postSticky(mTradeIndexPresenterCompl.getRealTimeData());
                 nextSymbole = mTradeIndexPresenterCompl.getRealTimeData().get(position).getSymbol();
@@ -307,7 +311,8 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onGetSymbolShow(BeanSymbolConfig symbolShow) {
-        OptionApplication.symbolShow = symbolShow;
+        this.symbolShow = symbolShow;
+        this.tz_detla = symbolShow.getTz_delta();
         ArrayList<BeanSymbolConfig.SymbolsBean> realTimeDatas
                 = mTradeIndexPresenterCompl.writeRealTimeData(symbolShow.getSymbols(), allSymbol);
         final Map<String, BeanChangePercent> mBeanChangePercentMap = mTradeIndexPresenterCompl.writePercentTimeData(symbolShow.getSymbols());
@@ -320,7 +325,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
             public void handleMessage(Message msg) {
                 //注意,偏移量的理解可能有误,如果换服务器后台的话,到时候要测试下
                 //修正,treemap不能存储重复的值,所以,map<String,List<BeanChangePercent>>
-                String deletekey;
+                List<String> deletekey=new ArrayList<>();
                 Map.Entry<String, BeanChangePercent> next;
                 long currentTime;
                 long keyTime;
@@ -328,25 +333,26 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
                 while (iterator.hasNext()) {
                     next = iterator.next();
                     try {
-                        long l = TimeUtils.stringToLong(TimeUtils.getCurrentTimeNoS(), "hh:mm")-TimeUtils.stringToLong(next.getKey(), "hh:mm");
-                        if ( l>=0) {
+                    int   time = (int)(TimeUtils.stringToLong(TimeUtils.getCurrentTimeNoS(), "hh:mm")/1000 - TimeUtils.stringToLong(next.getKey(), "hh:mm")/1000);
+                        if (time == 0) {
+                            Log.i(TAG, "handleMessage: eventBus time"+time);
                             EventBus.getDefault().post(next);
-                            deletekey = next.getKey();
-                        }else{
+                        } else if(time<0) {
                             //获取本地时间和第一个集合对比计算出相差的时间,休眠.
-
+                            Log.i(TAG, "handleMessage: 休息了time"+Math.abs(time));
+                            mHandler.sendEmptyMessageDelayed(0,Math.abs(time));
+                            break;
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
-
-
                 }
             }
         };
-        //定时器,轮训这个数组,做操作.将数据发送到MinaTimeChartActivity里面区做操作
-        EventBus.getDefault().post(mBeanChangePercentMap);
+        mHandler.sendEmptyMessage(0);
+//        //定时器,轮训这个数组,做操作.将数据发送到MinaTimeChartActivity里面区做操作
+//        EventBus.getDefault().post(mBeanChangePercentMap);
         vol_max = symbolShow.getVol_max();
         vol_min = symbolShow.getVol_min();
         step_min = symbolShow.getStep_min();

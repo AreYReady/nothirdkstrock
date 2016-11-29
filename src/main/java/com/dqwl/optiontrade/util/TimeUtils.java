@@ -3,6 +3,7 @@ package com.dqwl.optiontrade.util;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.text.format.Time;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,8 +30,8 @@ public class TimeUtils {
     }
 
     /**
-     * @author xjunda
-     * Created at 2016-07-16 10:46
+     * @author huangsc
+     * Created at 2016-11-16 10:46
      * 10位 unix时间戳
      */
     public static String getCurrentTimeNoS() {
@@ -40,6 +41,17 @@ public class TimeUtils {
         return dateString;
     }
 
+    public static Long getCurrentTimeHHMMNoS() throws ParseException {
+//        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+//        Date currentTime = new Date();
+//        String dateString = formatter.format(currentTime);
+//        return dateToLong(currentTime);
+        Time time = new Time();
+        time.setToNow();
+        return stringToLong(time.hour + ":" + time.minute, "HH:mm");
+    }
+
+    //算法是当前时间减去8:00得出来的毫毛值
     public static long stringToLong(String strTime, String formatType)
             throws ParseException {
         Date date = stringToDate(strTime, formatType); // String类型转成date类型

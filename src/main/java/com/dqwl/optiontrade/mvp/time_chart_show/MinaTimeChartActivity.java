@@ -29,11 +29,13 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dqwl.optiontrade.R;
 import com.dqwl.optiontrade.adapter.EndTimeAdapter;
 import com.dqwl.optiontrade.adapter.TradeTitleAdapter;
 import com.dqwl.optiontrade.base.BaseActivity;
+import com.dqwl.optiontrade.bean.BeanChangePercent;
 import com.dqwl.optiontrade.bean.BeanHistoryRequest;
 import com.dqwl.optiontrade.bean.BeanOrderResponse;
 import com.dqwl.optiontrade.bean.BeanOrderResult;
@@ -75,6 +77,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -85,12 +88,12 @@ import java.util.Map;
 import static com.dqwl.optiontrade.mvp.trade_index.TradeIndexActivity.activeOrder;
 import static com.dqwl.optiontrade.util.MoneyUtil.addPrice;
 
-public class MinaTimeChartActivity extends BaseActivity implements View.OnClickListener,ITimeChartShowView {
+public class MinaTimeChartActivity extends BaseActivity implements View.OnClickListener, ITimeChartShowView {
     /**
      * 进度条指示器高度
      */
     private static final int IMAGE_INDECATOR_HEIGHT = 24;
-    private String TAG=SystemUtil.getTAG(this.getClass());
+    private String TAG = SystemUtil.getTAG(this.getClass());
     /**
      * 从服务器获取多少个数据，默认为60个
      */
@@ -249,7 +252,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     /**
      * 历史数据
      */
-    private Map<String,HistoryDataList> historyDataList = new Hashtable<>();
+    private Map<String, HistoryDataList> historyDataList = new Hashtable<>();
     /**
      * 下单方向0，看跌，1看涨，-1取消
      */
@@ -259,6 +262,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
      * 进度条经历的时间差
      */
     private long timeOffset;
+    private int tz_delta;
 
 //    private HistoryRunable mHistoryRunable;
 
@@ -276,6 +280,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         symbolPosition = getIntent().getIntExtra(TradeIndexActivity.POSITION, 0);
 //        getIntent().getSerializableExtra(LoginActivity.ACTIVEORDER);
 //        bailMoneys = getResources().getStringArray(R.array.bail_money);
+        tz_delta = getIntent().getIntExtra(TradeIndexActivity.TZ_DELTA, 0);
         vol_max = getIntent().getIntExtra(TradeIndexActivity.VOL_MAX, 0);
         vol_min = getIntent().getIntExtra(TradeIndexActivity.VOL_MIN, 0);
         step_min = getIntent().getIntExtra(TradeIndexActivity.STEP_MIN, 0);
@@ -359,12 +364,13 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
             public void afterTextChanged(Editable s) {
                 String bailMoneyStr = tvBailMoney.getText().toString().substring(1);
                 double bailMoney = Double.valueOf(bailMoneyStr);
-                tvMoneyWin.setText((bailMoney*percent/100) +"");
+                tvMoneyWin.setText((bailMoney * percent / 100) + "");
             }
         });
-        tvNowPrice = ((NowPriceLine)timeChart.getChildAt(0)).getNowPriceTextview();
+        tvNowPrice = ((NowPriceLine) timeChart.getChildAt(0)).getNowPriceTextview();
         initOrerPopup();
     }
+
     @Override
     protected void initData() {
 //        mTimeChartShowPresenter
@@ -377,13 +383,14 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     }
 
     @Subscribe(sticky = true)
-    public void onGetAllSymbol(ArrayList<BeanSymbolConfig.SymbolsBean> symbolsBean){
+    public void onGetAllSymbol(ArrayList<BeanSymbolConfig.SymbolsBean> symbolsBean) {
         allSubscribeSymbols = symbolsBean;
-        if(tradeTitleAdapter!=null){
+        if (tradeTitleAdapter != null) {
             tradeTitleAdapter.notifyDataSetChanged();
         }
         initCycle();
     }
+
     /**
      * 初始化viewpager
      */
@@ -420,7 +427,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         });
     }
 
-    private class HistoryRunable implements Runnable{
+    private class HistoryRunable implements Runnable {
         private String histroyRequest;
 
         public HistoryRunable(String histroyRequest) {
@@ -430,7 +437,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         @Override
         public void run() {
             mTimeChartShowPresenter.writeHistroyRequestToServer(histroyRequest);
-            vpTradeSymbol.postDelayed(this, period*1000);
+            vpTradeSymbol.postDelayed(this, period * 1000);
         }
     }
 
@@ -438,36 +445,50 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
      * 初始化到期时间，派息比例，最大刻度
      */
     private void initCycle() {
-        BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean
-                = allSubscribeSymbols.get(symbolPosition).getCycles().get(0);
-        maxDegreeSecond = cyclesBean.getCycle();
-        percent = cyclesBean.getPercent();
-        endTime = cyclesBean.getDesc();
-        tvEndTime.setText(endTime);
-        String bailMoneyStr = tvBailMoney.getText().toString().substring(1);
-        double bailMoney = Double.valueOf(bailMoneyStr);
-        tvMoneyWin.setText((bailMoney*percent/100) +"");
+        List<BeanSymbolConfig.SymbolsBean.CyclesBean> cyclesBeanList
+                = allSubscribeSymbols.get(symbolPosition).getCycles();
+
+        //注意,极端情况下,该类型交易,不允许任何交易.当前时间没有在允许交易的时间,
+        BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean = checkPercent(cyclesBeanList);
+        if (cyclesBean == null) {
+            percent=0;
+            maxDegreeSecond = 0;
+            endTime = "0";
+            tvEndTime.setText(endTime);
+            String bailMoneyStr = tvBailMoney.getText().toString().substring(1);
+            double bailMoney = Double.valueOf(bailMoneyStr);
+            tvMoneyWin.setText((bailMoney * 0) + "");
+        } else {
+            maxDegreeSecond = cyclesBean.getCycle();
+            percent=cyclesBean.getPercent();
+            endTime = cyclesBean.getDesc();
+            tvEndTime.setText(endTime);
+            String bailMoneyStr = tvBailMoney.getText().toString().substring(1);
+            double bailMoney = Double.valueOf(bailMoneyStr);
+            tvMoneyWin.setText((bailMoney * percent / 100) + "");
+        }
+
         BeanSymbolConfig.SymbolsBean symbolsBean = allSubscribeSymbols.get(symbolPosition);
-        if(symbolsBean.getVol_min()>0){
+        if (symbolsBean.getVol_min() > 0) {
             vol_min = symbolsBean.getVol_min();
-        }else if(vol_min<=0){
+        } else if (vol_min <= 0) {
             vol_min = 10;//如果服务端全局和局部都没有配置，就用10
         }
-        if(symbolsBean.getVol_max()>0){
+        if (symbolsBean.getVol_max() > 0) {
             vol_max = symbolsBean.getVol_max();
-        }else if(vol_max<=0){//服务端全局和局部都没有配置
+        } else if (vol_max <= 0) {//服务端全局和局部都没有配置
             vol_max = 1000;
         }
-        if(symbolsBean.getStep_min()>0){
+        if (symbolsBean.getStep_min() > 0) {
             step_min = symbolsBean.getStep_min();
-        }else if(step_min<=0){//服务端全局和局部都没有配置
+        } else if (step_min <= 0) {//服务端全局和局部都没有配置
             step_min = 10;
         }
         bailMoneyList.clear();
-        for (int i = vol_min; i <= vol_max; i+=step_min) {
+        for (int i = vol_min; i <= vol_max; i += step_min) {
             bailMoneyList.add(i);
         }
-        if(bailMoneyList.get(bailMoneyList.size()-1)<vol_max){
+        if (bailMoneyList.get(bailMoneyList.size() - 1) < vol_max) {
             bailMoneyList.add(vol_max);
         }
         tvBailMoney.setText("$" + vol_min);
@@ -476,22 +497,88 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     }
 
     /**
+     * 遍历数据,找到当下该有的时间赔率
+     *
+     * @param cyclesBeanList
+     * @return
+     */
+    private BeanSymbolConfig.SymbolsBean.CyclesBean checkPercent(List<BeanSymbolConfig.SymbolsBean.CyclesBean> cyclesBeanList) {
+        long offsetTimeSS = tz_delta * 60 * 60 * 1000;
+        //key为该
+        for (BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean : cyclesBeanList) {
+            //根结束时间比,如果小于,就跟开始时间比.判断是否在这个时间内,如果大于,直接跳过,在遍历
+            try {
+//                long l = TimeUtils.stringToLong(cyclesBean.getTimes().get(0).getE(), "HH:mm");
+//                Long currentTimeHHMMNoS = TimeUtils.getCurrentTimeHHMMNoS();
+                if(cyclesBean.getTimes()==null){
+                    return cyclesBean;
+                }else if (TimeUtils.getCurrentTimeHHMMNoS() - TimeUtils.stringToLong(cyclesBean.getTimes().get(0).getE(), "HH:mm") - offsetTimeSS <= 0) {
+                    if (TimeUtils.getCurrentTimeHHMMNoS() - TimeUtils.stringToLong(cyclesBean.getTimes().get(0).getB(), "HH:mm") - offsetTimeSS >= 0) {
+                        return cyclesBean;
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return null;
+    }
+
+    /**
+     * 记录全部记录,和合适记录的index对应关系
+     */
+    private List<Integer> indexList=new ArrayList<>();
+    /**
+     * 遍历数据,找到当下合适能交易的CyclesBean集合.
+     *
+     * @param cyclesBeanList
+     * @return
+     */
+    private List<BeanSymbolConfig.SymbolsBean.CyclesBean> checkPercentList(List<BeanSymbolConfig.SymbolsBean.CyclesBean> cyclesBeanList) {
+        long offsetTimeSS = tz_delta * 60 * 60 * 1000;
+        indexList.clear();
+        List<BeanSymbolConfig.SymbolsBean.CyclesBean> fitCyclesBeanList = new ArrayList<BeanSymbolConfig.SymbolsBean.CyclesBean>();
+        BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean;
+        for (int i=0;i<cyclesBeanList.size();i++) {
+            cyclesBean=cyclesBeanList.get(i);
+            try {
+
+                //根结束时间比,如果小于,就跟开始时间比.判断是否在这个时间内,如果大于,直接跳过,在遍历
+                if(cyclesBean.getTimes()==null){
+                    fitCyclesBeanList.add(cyclesBean);
+                    indexList.add(i);
+                }else if ( TimeUtils.getCurrentTimeHHMMNoS() - TimeUtils.stringToLong(cyclesBean.getTimes().get(0).getE(), "HH:mm") - offsetTimeSS <= 0) {
+                    if (TimeUtils.getCurrentTimeHHMMNoS() - TimeUtils.stringToLong(cyclesBean.getTimes().get(0).getB(), "HH:mm") - offsetTimeSS >= 0) {
+                        fitCyclesBeanList.add(cyclesBean);
+                        indexList.add(i);
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return fitCyclesBeanList;
+    }
+
+    /**
      * 检查是否有缓存，并且加载，没有则发送请求给服务器
+     *
      * @param position
      * @param flag     是否最大值，最小值变化
      */
     public void checkChartCache(int position, boolean flag) {
         BeanHistoryRequest cache = new BeanHistoryRequest(allSubscribeSymbols.get(position).getSymbol());
         HistoryDataList nowDataList = null;
-        if(mTimeChartShowPresenter!=null)
-        nowDataList = mTimeChartShowPresenter.isHistoryCache(cache, maxDegreeSecond);
+        if (mTimeChartShowPresenter != null)
+            nowDataList = mTimeChartShowPresenter.isHistoryCache(cache, maxDegreeSecond);
         BeanHistoryRequest historyRequest = new BeanHistoryRequest
                 (allSubscribeSymbols.get(position).getSymbol(), COUNTS);
         historyRequestStr = new Gson().toJson(historyRequest, BeanHistoryRequest.class);
         String symbol = allSubscribeSymbols.get(symbolPosition).getSymbol();
         if (nowDataList != null) {
-                mTimeChartShowPresenter.subscribeSymbols(this, symbol,
-                        allSubscribeSymbols.get(position).getSymbol());
+            mTimeChartShowPresenter.subscribeSymbols(this, symbol,
+                    allSubscribeSymbols.get(position).getSymbol());
             cpbarForTimeChart.stopLoadingAnimation();
             drawTimeChart(nowDataList);
             if (Double.valueOf(nowDataList.getNowPrice()) <= 0) {
@@ -500,16 +587,16 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
                 timeChart.showNowPrice(Double.valueOf(nowDataList.getNowPrice()), nowDataList.getPrice(), nowDataList.getFlag());
                 setRealTimeText();
                 setRealTimeTvBackground(nowDataList.getFlag());
-                if(flag){
+                if (flag) {
                     timeChart.postInvalidate();
                 }
             }
         } else {
             timeChart.getChildAt(0).setVisibility(View.INVISIBLE);
             timeChart.setData(null, null, ivSwichChart.isSelected());
-                mTimeChartShowPresenter.subscribeSymbols(this, symbol,
-                        allSubscribeSymbols.get(position).getSymbol());
-                cpbarForTimeChart.startLoadingAnimation();
+            mTimeChartShowPresenter.subscribeSymbols(this, symbol,
+                    allSubscribeSymbols.get(position).getSymbol());
+            cpbarForTimeChart.startLoadingAnimation();
             mTimeChartShowPresenter.writeHistroyRequestToServer(historyRequestStr);
 //            if(mHistoryRunable!=null) {
 //                vpTradeSymbol.removeCallbacks(mHistoryRunable);
@@ -521,6 +608,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 根据历史数据算出最大最小值，并且重绘
+     *
      * @param nowDataList
      */
     private void drawTimeChart(HistoryDataList nowDataList) {
@@ -546,13 +634,13 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     /**
      * 设置实时文本价格，限制长度和实时价格一样
      */
-    private void setRealTimeText(){
+    private void setRealTimeText() {
 //        int maxLenth = SystemUtil.getMaxLength(tvNowPrice);
         String price = tvNowPrice.getText().toString();
 //        if(price.length()>maxLenth){//超过7位则截取前7位
 //            tvRealTimePrice.setText(MoneyUtil.getRealTimePriceTextBig(this,price.substring(0,maxLenth)));
 //        }else {
-            tvRealTimePrice.setText(MoneyUtil.getRealTimePriceTextBig(this,price));
+        tvRealTimePrice.setText(MoneyUtil.getRealTimePriceTextBig(this, price));
 //        }
     }
 
@@ -569,6 +657,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 如果没有实时价格，则获取历史价格中的最后两个，并且比较
+     *
      * @return 0最后一个价格，1倒数第二个价格
      */
     public double[] getTempNowPrice(double[] nowPrice) {
@@ -591,9 +680,9 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onTimeOut(String timeout){
-        if(timeout.equalsIgnoreCase(SSLSocketChannel.TIMEOUT)){
-            if(popupWindowLoading!=null)
+    public void onTimeOut(String timeout) {
+        if (timeout.equalsIgnoreCase(SSLSocketChannel.TIMEOUT)) {
+            if (popupWindowLoading != null)
                 popupWindowLoading.dismiss();
             showToast(R.string.net_or_server_error);
             llNetworkErrorTip.setVisibility(View.VISIBLE);
@@ -606,7 +695,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         if (!SystemUtil.isAvalidNetSetting(this)) {
             return;
         }
-        if(((HandlerSend)handlerRead).getSSLSocketChannel()==null){
+        if (((HandlerSend) handlerRead).getSSLSocketChannel() == null) {
             return;
         }
         llNetworkErrorTip.setVisibility(View.INVISIBLE);
@@ -626,15 +715,16 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
 //        mTimeChartShowPresenter.getHistoyCache(this);
         mTimeChartShowPresenter.getUsrInfo(this);
-        checkChartCache(symbolPosition,false);
+        checkChartCache(symbolPosition, false);
         mTimeChartShowPresenter.getActiveOrder(
-                activeOrder, timeOffset, smallProgressBars.size()>0);//大于0的话，说明已经处理过了。或者没有退出该页面
-        if(popupWindowLoading!=null){
+                activeOrder, timeOffset, smallProgressBars.size() > 0);//大于0的话，说明已经处理过了。或者没有退出该页面
+        if (popupWindowLoading != null) {
             popupWindowLoading.dismiss();
         }
 
     }
-    private Handler handler=new Handler(){
+
+    private Handler handler = new Handler() {
         @Override
         public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
             return super.sendMessageAtTime(msg, uptimeMillis);
@@ -643,9 +733,10 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
     private CountDownTimer countDownTimer;
     private long time;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getServerTime(BeanServerTime serverTime){
-        if(countDownTimer!=null){
+    public void getServerTime(BeanServerTime serverTime) {
+        if (countDownTimer != null) {
             countDownTimer.cancel();
         }
         tvServerTime.setVisibility(View.VISIBLE);
@@ -654,7 +745,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onTick(long l) {
                 time += 1000l;
-                tvServerTime.setText(TimeUtils.getXTime(time/1000));
+                tvServerTime.setText(TimeUtils.getXTime(time / 1000));
             }
 
             @Override
@@ -666,39 +757,50 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChangPercent(Map.Entry<String, BeanChangePercent> next) {
+        Log.i(TAG, "onChangPercent: 执行了," + next.getKey() + "   " + next.getValue().getSymbol());
+        if(allSubscribeSymbols.get(symbolPosition).getSymbol().equalsIgnoreCase(next.getValue().getSymbol())){
+            if(tvEndTime.getText().toString().equalsIgnoreCase(next.getValue().getDesc())){
+                tradeTitleAdapter.notifyDataSetChanged();
+            }
+        }
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDrawRealTimeData(RealTimeDataList realTimeData) {//绘制实时数据
         String symbol = allSubscribeSymbols.get(symbolPosition).getSymbol();
-        if (realTimeData != null && realTimeData.getQuotes() != null){
-            for (RealTimeDataList.BeanRealTime realTime : realTimeData.getQuotes()){
-                if(symbol.equalsIgnoreCase(realTime.getSymbol())){
-                    String realTimeSymbol =  realTime.getSymbol();
+        if (realTimeData != null && realTimeData.getQuotes() != null) {
+            for (RealTimeDataList.BeanRealTime realTime : realTimeData.getQuotes()) {
+                if (symbol.equalsIgnoreCase(realTime.getSymbol())) {
+                    String realTimeSymbol = realTime.getSymbol();
                     double nowPrice = realTime.getBid();
                     long nowTime = TimeUtils
                             .getOrderStartTime(realTime.getTime());//和last一样标准时区
                     Log.i("123", "onDrawRealTimeData: now" + realTime.getTime() + realTimeSymbol);
                     String o;
                     HistoryDataList dataList = historyDataList.get(realTimeSymbol);//当前的历史数据
-                    if(dataList==null)
+                    if (dataList == null)
                         return;
                     int digits = dataList.getDigits();
                     long firstTime = dataList.getItems().get(0).getT();//秒
                     long lastTimeHistory = (dataList.getItems().get(0).getT()
-                            + dataList.getItems().get(dataList.getCount()-1).getT())*1000;
+                            + dataList.getItems().get(dataList.getCount() - 1).getT()) * 1000;
                     Log.i("123", "onDrawRealTimeData: history" + TimeUtils.getShowTime(lastTimeHistory) + realTimeSymbol);
-                    if(nowTime - lastTimeHistory >= period*1000){//说明当前实时价格超过最后一个时间点，暂时定为一分钟
+                    if (nowTime - lastTimeHistory >= period * 1000) {//说明当前实时价格超过最后一个时间点，暂时定为一分钟
                         //最后一个的时间，有可能不止一个周期，中间有可能没有数据
-                        int timeDelay = (int) ((nowTime - lastTimeHistory)/period/1000);
+                        int timeDelay = (int) ((nowTime - lastTimeHistory) / period / 1000);
                         Log.i("123", "onDrawRealTimeData: " + timeDelay);
-                        long lastTime = dataList.getItems().get(dataList.getCount()-1).getT() + period*timeDelay;
+                        long lastTime = dataList.getItems().get(dataList.getCount() - 1).getT() + period * timeDelay;
                         dataList.getItems().remove(0);//移除第一个数据，即整个view向左移动
-                        dataList.getItems().get(0).setT(firstTime + period*timeDelay);
+                        dataList.getItems().get(0).setT(firstTime + period * timeDelay);
 //                        lastTime += period*1000;//暂时为60秒
 //                        long t = lastTime/1000 - dataList.getItems().get(0).getT();//秒
-                        lastOpenPrice.put(realTimeSymbol, nowPrice+"");
-                        lastMaxPrice.put(realTimeSymbol, nowPrice+"");
-                        lastMinPrice.put(realTimeSymbol, nowPrice+"");
-                        lastClosePrice.put(realTimeSymbol, nowPrice+"");
-                        o = new BigDecimal(nowPrice+"").movePointRight(digits).intValue()
+                        lastOpenPrice.put(realTimeSymbol, nowPrice + "");
+                        lastMaxPrice.put(realTimeSymbol, nowPrice + "");
+                        lastMinPrice.put(realTimeSymbol, nowPrice + "");
+                        lastClosePrice.put(realTimeSymbol, nowPrice + "");
+                        o = new BigDecimal(nowPrice + "").movePointRight(digits).intValue()
                                 + "|0|0|0";
                         HistoryData data = new HistoryData(o, lastTime);
                         dataList.getItems().add(data);
@@ -724,29 +826,29 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
                         Log.i("123", "lastData: " + nowPrice);
                         Log.i("123", "lastData: " + new Gson().toJson(data, HistoryData.class));
                         timeChart.invalidate();
-                    }else {//绘制最后一个数据
-                        lastClosePrice.put(realTimeSymbol, nowPrice+"");
+                    } else {//绘制最后一个数据
+                        lastClosePrice.put(realTimeSymbol, nowPrice + "");
                         String openPrice = lastOpenPrice.get(realTimeSymbol);
                         String maxPrice = lastMaxPrice.get(realTimeSymbol);
                         String minPrice = lastMinPrice.get(realTimeSymbol);
                         String closePrice = lastClosePrice.get(realTimeSymbol);
-                        BigDecimal nowDecimal = new BigDecimal(nowPrice+"");
-                        BigDecimal maxDecimal = new BigDecimal(maxPrice+"");
+                        BigDecimal nowDecimal = new BigDecimal(nowPrice + "");
+                        BigDecimal maxDecimal = new BigDecimal(maxPrice + "");
                         BigDecimal minDecimal = new BigDecimal(minPrice + "");
-                        if(nowDecimal.compareTo(maxDecimal)==1){
-                            lastMaxPrice.put(realTimeSymbol, nowPrice+"");
-                        }else if(nowDecimal.compareTo(minDecimal)==-1){
-                            lastMinPrice.put(realTimeSymbol, nowPrice+"");
+                        if (nowDecimal.compareTo(maxDecimal) == 1) {
+                            lastMaxPrice.put(realTimeSymbol, nowPrice + "");
+                        } else if (nowDecimal.compareTo(minDecimal) == -1) {
+                            lastMinPrice.put(realTimeSymbol, nowPrice + "");
                         }
-                        long lastTime = dataList.getItems().get(dataList.getCount()-1).getT();
+                        long lastTime = dataList.getItems().get(dataList.getCount() - 1).getT();
                         dataList.getItems()//完整的写入最后一个数据
-                                .remove(dataList.getItems().get(dataList.getCount()-1));
-                        o = new BigDecimal(openPrice+"").movePointRight(digits).intValue()
-                                + "|" + new BigDecimal(MoneyUtil.subPrice(lastMaxPrice.get(realTimeSymbol),openPrice))
+                                .remove(dataList.getItems().get(dataList.getCount() - 1));
+                        o = new BigDecimal(openPrice + "").movePointRight(digits).intValue()
+                                + "|" + new BigDecimal(MoneyUtil.subPrice(lastMaxPrice.get(realTimeSymbol), openPrice))
                                 .movePointRight(digits).intValue()
                                 + "|" + new BigDecimal(MoneyUtil.subPrice(lastMinPrice.get(realTimeSymbol), openPrice))
                                 .movePointRight(digits).intValue()
-                                + "|" + new BigDecimal(MoneyUtil.subPrice(lastClosePrice.get(realTimeSymbol),openPrice))
+                                + "|" + new BigDecimal(MoneyUtil.subPrice(lastClosePrice.get(realTimeSymbol), openPrice))
                                 .movePointRight(digits).intValue();
                         HistoryData data = new HistoryData(o, lastTime);
                         dataList.getItems().add(data);
@@ -782,7 +884,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
                             allSubscribeSymbols.get(symbolPosition).getSymbol());
                     historyDataList.put(realTimeSymbol, dataList);
                     mTimeChartShowPresenter.saveRealTimeCache(cache, tvNowPrice.getText().toString(), flag
-                            ,nowPrice, symbolPosition, firstPrice);
+                            , nowPrice, symbolPosition, firstPrice);
                 }
             }
         }
@@ -811,6 +913,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 设置实时文本的背景
+     *
      * @param flag
      */
     private void setRealTimeTvBackground(int flag) {
@@ -886,8 +989,8 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        Log.i(TAG, "onDestroy: activeOrder.size"+TradeIndexActivity.activeOrder.size());
-        if(mTimeChartShowPresenter!=null) {
+        Log.i(TAG, "onDestroy: activeOrder.size" + TradeIndexActivity.activeOrder.size());
+        if (mTimeChartShowPresenter != null) {
             mTimeChartShowPresenter.onDestroy(this);
         }
         SoundManager.releaseResources();
@@ -899,10 +1002,10 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         if (popupProgressbars != null) {
             popupProgressbars.dismiss();
         }
-        if(popupWindowLoading!=null){
+        if (popupWindowLoading != null) {
             popupWindowLoading.dismiss();
         }
-        if(countDownTimer!=null){
+        if (countDownTimer != null) {
             countDownTimer.cancel();
         }
 //        if(mHistoryRunable!=null){
@@ -913,6 +1016,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        checkTimeOnClick();
         switch (v.getId()) {
             case R.id.topActionButton1:
                 startActivityForResult(new Intent(this, TradeRecordActivity.class)
@@ -928,9 +1032,9 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
                 checkChartCache(symbolPosition, false);
                 break;
             case R.id.networkErrorRefreshButton1:
-                if(!isNetWorkAvalid())
+                if (!isNetWorkAvalid())
                     return;
-                if(mTimeChartShowPresenter==null){
+                if (mTimeChartShowPresenter == null) {
                     mTimeChartShowPresenter = new TimeChartShowPresenterCompl(this);
                 }
                 showPopupLoading(cpbNetworkError);
@@ -943,14 +1047,14 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
             case R.id.iv_sub_money:
             case R.id.iv_add_money:
                 int position = (int) tvBailMoney.getTag();
-                if(v.getId()==R.id.iv_sub_money){
+                if (v.getId() == R.id.iv_sub_money) {
                     position--;
-                }else {
+                } else {
                     position++;
                 }
-                if(position>bailMoneyList.size()-1){
-                    position = bailMoneyList.size()-1;
-                }else if(position<0){
+                if (position > bailMoneyList.size() - 1) {
+                    position = bailMoneyList.size() - 1;
+                } else if (position < 0) {
                     position = 0;
                 }
                 tvBailMoney.setText("$" + bailMoneyList.get(position));
@@ -958,17 +1062,22 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.tv_time_end:
             case R.id.iv_end_time:
-                showEndTimeListDialog();
+                if (checkTimeOnClick())
+                    showEndTimeListDialog();
                 break;
             case R.id.fl_up_order:
-                direction = 1;
-                ivOpenDirectionPopOrder.setImageResource(R.mipmap.call_small_icon);
-                showPopupOrder();
+                if (checkTimeOnClick()) {
+                    direction = 1;
+                    ivOpenDirectionPopOrder.setImageResource(R.mipmap.call_small_icon);
+                    showPopupOrder();
+                }
                 break;
             case R.id.fl_down_order:
-                direction = 0;
-                ivOpenDirectionPopOrder.setImageResource(R.mipmap.put_small_icon);
-                showPopupOrder();
+                if (checkTimeOnClick()) {
+                    direction = 0;
+                    ivOpenDirectionPopOrder.setImageResource(R.mipmap.put_small_icon);
+                    showPopupOrder();
+                }
                 break;
             case R.id.cancelButton1:
                 direction = -1;
@@ -986,8 +1095,22 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    /**
+     * 判断时间是否为0.如果为零,即代表当前时间内,没有任何能交易的有效时间,取消他们的点击效果
+     *
+     * @return true允许点击, false不允许点击
+     */
+    private boolean checkTimeOnClick() {
+        if (tvEndTime.getText().toString().equalsIgnoreCase("0")) {
+            Log.i(TAG, "checkTimeOnClick: 当前时间为0,各种交易都不允许");
+            Toast.makeText(this, "当前时间段里,该类型交易都不被允许", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
     private void showBailMoneyDialog() {
-        if(dialogBailMoney == null){
+        if (dialogBailMoney == null) {
             View view = LayoutInflater.from(this).inflate(R.layout.dialog_bail_money_pickup, null);
             ListView lvBailMoney = (ListView) view.findViewById(R.id.lv_bail_money);
             ArrayAdapter<Integer> lvBailMoneyAdapter = new ArrayAdapter(this,
@@ -1015,29 +1138,33 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 //            final String[] endTimes = getResources().getStringArray(R.array.end_time);
 //            final String[] endTimeToServers = getResources().getStringArray(R.array.end_time_to_server);
 //            final int[] maxDegrees = getResources().getIntArray(R.array.end_time_second);
-            View view = LayoutInflater.from(this).inflate(R.layout.dialog_end_time_pickup, null);
-            ListView lvEndTime = (ListView) view.findViewById(R.id.lv_end_time_select);
-            final List<BeanSymbolConfig.SymbolsBean.CyclesBean> data = allSubscribeSymbols.get(symbolPosition).getCycles();
-            EndTimeAdapter endTimeAdapter =
-                    new EndTimeAdapter(this, data);
-            lvEndTime.setAdapter(endTimeAdapter);
-            dialogEndtime = new AlertDialog.Builder(this)
-                    .setView(view).create();
-            dialogEndtime.setCanceledOnTouchOutside(true);
-            lvEndTime.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean = data.get(position);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_end_time_pickup, null);
+        ListView lvEndTime = (ListView) view.findViewById(R.id.lv_end_time_select);
+        final List<BeanSymbolConfig.SymbolsBean.CyclesBean> data = allSubscribeSymbols.get(symbolPosition).getCycles();
+        final List<BeanSymbolConfig.SymbolsBean.CyclesBean> cyclesBeanList = checkPercentList(data);
+        EndTimeAdapter endTimeAdapter =
+                new EndTimeAdapter(this, cyclesBeanList);
+
+        lvEndTime.setAdapter(endTimeAdapter);
+        dialogEndtime = new AlertDialog.Builder(this)
+                .setView(view).create();
+        dialogEndtime.setCanceledOnTouchOutside(true);
+        lvEndTime.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean = cyclesBeanList.get(position);
 //                    endTimeToServer = cyclesBean.get;
-                    percent = cyclesBean.getPercent();
-                    maxDegreeSecond =cyclesBean.getCycle();
-                    endTime = cyclesBean.getDesc();
-                    tvEndTime.setText(endTime);
+                percent = cyclesBean.getPercent();
+                maxDegreeSecond = cyclesBean.getCycle();
+                endTime = cyclesBean.getDesc();
+                tvEndTime.setText(endTime);
 //                    checkChartCache(symbolPosition, fals
-                    dialogEndtime.dismiss();
-                    tradeTitleAdapter.setPercentPostion(symbolPosition, position);
-                }
-            });
+                dialogEndtime.dismiss();
+                //做转换
+                position=indexList.get(position);
+                tradeTitleAdapter.setPercentPostion(symbolPosition, position);
+            }
+        });
         dialogEndtime.show();
     }
 
@@ -1045,7 +1172,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
      * 下单，弹出窗口按确定后下单，或者3秒后自动下单
      */
     private void placeOrder() {
-        if(direction<0){
+        if (direction < 0) {
             return;
         }
         if (!SystemUtil.isAvalidNetSetting(this)) {
@@ -1054,7 +1181,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         }
 
         double money = Double.valueOf(tvBailMoney.getText().toString().substring(1));
-        if(mTimeChartShowPresenter!=null){
+        if (mTimeChartShowPresenter != null) {
             mTimeChartShowPresenter.writeOrderToServer(allSubscribeSymbols.get(symbolPosition).getSymbol(),
                     direction, money, maxDegreeSecond, percent);
             cpbarForTimeChart.startLoadingAnimation();
@@ -1188,13 +1315,13 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         llProgressbarContainer.addView(imageView, 0);
         int position = 0;
         for (int i = 0; i < smallProgressBars.size(); i++) {
-            if(orderResult.getTime_span()>=smallProgressBars.get(i).getOrder().getTime_span()){
+            if (orderResult.getTime_span() >= smallProgressBars.get(i).getOrder().getTime_span()) {
                 position = i;
                 break;
             }
             position = smallProgressBars.size();
         }
-        mLineWrapLayout.addView(llProgressbarContainer,position);
+        mLineWrapLayout.addView(llProgressbarContainer, position);
         if (popupProgressbars != null && popupProgressbars.isShowing()) {
             tvSymbolBigProgress.setText(smallProgressBar.getOrder().getSymbol());
             tvOpenPriceBigProgress.setText(smallProgressBar.getOrder().getOpen_price() + "");
@@ -1209,7 +1336,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
         } else {
             imageView.setVisibility(View.INVISIBLE);
         }
-        smallProgressBars.add(position,smallProgressBar);
+        smallProgressBars.add(position, smallProgressBar);
         llProgressbarContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1268,6 +1395,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 下单反馈 0为成功，其他为失败
+     *
      * @param orderResponse
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -1311,7 +1439,7 @@ public class MinaTimeChartActivity extends BaseActivity implements View.OnClickL
                     bigProgressBar.removeCallbacks(bigProgressRunnable);//关闭完之后要删除定时
                     rlContain.addView(svContain, 1);//要加在timechart後面，networkerror前面
                     RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) svContain.getLayoutParams();
-                    lp.setMargins(DensityUtil.dip2px(MinaTimeChartActivity.this, 30), 0,0,0);
+                    lp.setMargins(DensityUtil.dip2px(MinaTimeChartActivity.this, 30), 0, 0, 0);
                     svContain.setLayoutParams(lp);
 //                    llContain.setTranslationY(-IMAGE_INDECATOR_HEIGHT);//窗口关闭时候，也要移动
                 }

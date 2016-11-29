@@ -11,8 +11,30 @@ public class BeanChangePercent {
     private int type;
     private String symbol;
     private int percent;
-    private int tz_delta;
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    /**
+     * 记录和主数据相对index;
+     */
+    private int index;
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    private int tz_delta;
+    private String desc;
     public int getType() {
         return type;
     }

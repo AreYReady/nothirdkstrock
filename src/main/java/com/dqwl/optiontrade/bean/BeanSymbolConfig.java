@@ -25,6 +25,16 @@ public class BeanSymbolConfig {
     private int step_min;
     private int vol_max;
     private int vol_min;
+    private int tz_delta;
+
+    public int getTz_delta() {
+        return tz_delta;
+    }
+
+    public void setTz_delta(int tz_delta) {
+        this.tz_delta = tz_delta;
+    }
+
     /**
      * cycles : [{"cycle":60,"desc":"60秒","percent":85},{"cycle":120,"desc":"120秒","percent":75},{"cycle":180,"desc":"180秒","percent":65},{"cycle":300,"desc":"5分钟","percent":55},{"cycle":3600,"desc":"1小时","percent":55}]
      * desc : 黄金/美元
@@ -94,16 +104,6 @@ public class BeanSymbolConfig {
         private String symbol;
         private int vol_max;
         private int vol_min;
-        private int tz_delta;
-
-        public int getTz_delta() {
-            return tz_delta;
-        }
-
-        public void setTz_delta(int tz_delta) {
-            this.tz_delta = tz_delta;
-        }
-
         private int flag;
         private float productPrice;
 
