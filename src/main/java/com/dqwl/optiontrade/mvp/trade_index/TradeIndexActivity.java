@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.dqwl.optiontrade.R;
 import com.dqwl.optiontrade.adapter.RealTimeAdapter;
+import com.dqwl.optiontrade.application.OptionApplication;
 import com.dqwl.optiontrade.base.BaseActivity;
 import com.dqwl.optiontrade.bean.BeanChangePercent;
 import com.dqwl.optiontrade.bean.BeanCurrentServerTime;
@@ -312,6 +313,7 @@ public class TradeIndexActivity extends BaseActivity implements View.OnClickList
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onGetSymbolShow(BeanSymbolConfig symbolShow) {
         this.symbolShow = symbolShow;
+        OptionApplication.symbolShow=symbolShow;
         this.tz_detla = symbolShow.getTz_delta();
         ArrayList<BeanSymbolConfig.SymbolsBean> realTimeDatas
                 = mTradeIndexPresenterCompl.writeRealTimeData(symbolShow.getSymbols(), allSymbol);

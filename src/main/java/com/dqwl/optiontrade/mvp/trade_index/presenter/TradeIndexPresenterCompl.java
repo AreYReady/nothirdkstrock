@@ -189,15 +189,17 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
         for(BeanSymbolConfig.SymbolsBean symbol:symbolShow) {
             mBeanChangePercent.setTz_delta(TradeIndexActivity.tz_detla);
             mBeanChangePercent.setSymbol(symbol.getSymbol());
-            for (BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean : symbol.getCycles()) {
-                mBeanChangePercent.setPercent(cyclesBean.getPercent());
-                //加入改变时间
-                mBeanChangePercent.setType(0);
-                if(cyclesBean.getTimes()!=null) {
-                    mBeanChangePercents.put(cyclesBean.getTimes().get(0).getB(), mBeanChangePercent);
-                    mBeanChangePercent.setType(1);
-                    //加入消失时间
-                    mBeanChangePercents.put(cyclesBean.getTimes().get(0).getE(), mBeanChangePercent);
+            if (symbol.getCycles() != null) {
+                for (BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean : symbol.getCycles()) {
+                    mBeanChangePercent.setPercent(cyclesBean.getPercent());
+                    //加入改变时间
+                    mBeanChangePercent.setType(0);
+                    if (cyclesBean.getTimes() != null) {
+                        mBeanChangePercents.put(cyclesBean.getTimes().get(0).getB(), mBeanChangePercent);
+                        mBeanChangePercent.setType(1);
+                        //加入消失时间
+                        mBeanChangePercents.put(cyclesBean.getTimes().get(0).getE(), mBeanChangePercent);
+                    }
                 }
             }
         }

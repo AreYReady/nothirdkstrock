@@ -107,20 +107,22 @@ public class TradeTitleAdapter extends PagerAdapter {
     }
     private boolean setPercent(BeanSymbolConfig.SymbolsBean realTimeData){
         long offsetTimeSS = TradeIndexActivity.tz_detla * 60 * 60 * 1000;
-        for (BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean : realTimeData.getCycles()) {
-            //根结束时间比,如果小于,就跟开始时间比.判断是否在这个时间内,如果大于,直接跳过,在遍历
-            try {
-                if(cyclesBean.getTimes()==null){
-                    tvCommisionLevel.setText(cyclesBean.getPercent()+ "%");
-                    return true;
-                }else if (TimeUtils.getCurrentTimeHHMMNoS() - TimeUtils.stringToLong(cyclesBean.getTimes().get(0).getE(), "HH:mm") - offsetTimeSS <= 0) {
-                    if (TimeUtils.getCurrentTimeHHMMNoS() - TimeUtils.stringToLong(cyclesBean.getTimes().get(0).getB(), "HH:mm") - offsetTimeSS >= 0) {
-                        tvCommisionLevel.setText(cyclesBean.getPercent()+ "%");
+        if(realTimeData.getCycles()!=null) {
+            for (BeanSymbolConfig.SymbolsBean.CyclesBean cyclesBean : realTimeData.getCycles()) {
+                //根结束时间比,如果小于,就跟开始时间比.判断是否在这个时间内,如果大于,直接跳过,在遍历
+                try {
+                    if (cyclesBean.getTimes() == null) {
+                        tvCommisionLevel.setText(cyclesBean.getPercent() + "%");
                         return true;
+                    } else if (TimeUtils.getCurrentTimeHHMMNoS() - TimeUtils.stringToLong(cyclesBean.getTimes().get(0).getE(), "HH:mm") - offsetTimeSS <= 0) {
+                        if (TimeUtils.getCurrentTimeHHMMNoS() - TimeUtils.stringToLong(cyclesBean.getTimes().get(0).getB(), "HH:mm") - offsetTimeSS >= 0) {
+                            tvCommisionLevel.setText(cyclesBean.getPercent() + "%");
+                            return true;
+                        }
                     }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
         return false;
