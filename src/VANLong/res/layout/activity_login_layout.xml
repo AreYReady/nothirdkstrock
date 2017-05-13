@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/RelativeLayout1"
+    android:background="@color/trans_black"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ImageView
+        android:id="@id/imageView2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/login_bg" />
+    <TextView
+        android:id="@id/loginAppVersionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="4.0dip"
+        android:paddingBottom="3.0dip"
+        android:shadowColor="#ff000000"
+        android:shadowDx="1.0"
+        android:shadowDy="1.0"
+        android:shadowRadius="3.0"
+        android:text="v1.0.1"
+        android:textColor="#ffffffff"
+        android:textSize="11.0sp"
+        android:textStyle="bold" />
+
+    <ViewStub
+        android:padding="10dp"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text="东青网络科技有限公司出品"/>
+
+    <ScrollView
+        android:id="@id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:id="@id/innerScrollContainer1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_marginTop="30dp"
+                    android:id="@id/LinearLayout1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:visibility="gone"
+                        android:id="@id/ls_lanugaePickerBt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="8.0dip"
+                        android:adjustViewBounds="false"
+                        android:background="@drawable/lanuage_pick_button_selector"
+                        android:baselineAlignBottom="false"
+                        android:cropToPadding="false"
+                        android:paddingRight="18.0dip"
+                        android:paddingTop="4.0dip"
+                        android:scaleType="centerInside" />
+
+                    <ImageView
+                        android:id="@id/leftPairsImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="85dp"
+                        android:scaleType="fitCenter"
+                        android:src="@mipmap/logo" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:visibility="gone"
+                        android:layout_marginTop="80dp"
+                        android:text="二元期权"/>
+
+                    <LinearLayout
+                        android:id="@id/linearLayout1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15.0dip"
+                        android:layout_marginRight="15.0dip"
+                        android:layout_marginTop="50.0dip"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32.0dip"
+                            android:layout_marginRight="32.0dip">
+
+                            <EditText
+                                android:drawableLeft="@mipmap/icon_head"
+                                android:drawablePadding="10dp"
+                                android:id="@+id/et_user_name"
+                                android:layout_width="0.0dip"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:background="@mipmap/bg_login"
+                                android:ems="10"
+                                android:inputType="number"
+                                android:padding="13.0dip"
+                                android:hint="用户名"
+                                android:textColorHint="@android:color/darker_gray"
+                                android:maxLength="11"
+                                android:textColor="@android:color/white">
+
+                                <requestFocus />
+                            </EditText>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="10dp"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/et_user_password"
+                                android:layout_width="0.0dip"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32.0dip"
+                                android:layout_marginRight="32.0dip"
+                                android:layout_weight="1.0"
+                                android:background="@mipmap/bg_login"
+                                android:ems="10"
+                                android:hint="密码"
+                                android:textColor="@android:color/white"
+                                android:textColorHint="@android:color/darker_gray"
+                                android:drawablePadding="10dp"
+                                android:drawableLeft="@mipmap/icon_password"
+                                android:inputType="textPassword"
+                                android:padding="13.0dip" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@id/metaServer_Option_pickerLayout"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="1.0dip"
+                                android:background="#ff9b9b9b" />
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="0.0dip"
+                                android:layout_weight="1.0"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <com.dqwl.optiontrade.widget.AutofitTextView
+                                    android:id="@id/metaServer_PickName"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginLeft="12.0dip"
+                                    android:layout_marginRight="5.0dip"
+                                    android:layout_weight="1.0"
+                                    android:clickable="true"
+                                    android:text="jklff"
+                                    android:gravity="center_vertical"
+                                    android:textColor="#ff0d0c0c"
+                                    android:textSize="17.0sp" />
+
+                                <ImageButton
+                                    android:id="@id/metaServer_pickBt"
+                                    android:layout_width="70.0dip"
+                                    android:layout_height="35.0dip"
+                                    android:layout_marginBottom="8.0dip"
+                                    android:layout_marginRight="5.0dip"
+                                    android:layout_marginTop="8.0dip"
+                                    android:layout_weight="1.0"
+                                    android:background="@drawable/black_button_selector"
+                                    android:src="@mipmap/down_sign" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="70dp"
+                        android:layout_marginRight="70dp"
+                        android:layout_marginTop="30.0dip"
+                        android:background="@drawable/general_button_selector_bg"
+                        android:shadowColor="@color/GENERAL_BUTTON_TEXT_SHADOW_COLOR"
+                        android:shadowDx="1.0"
+                        android:shadowDy="1.0"
+                        android:shadowRadius="2.0"
+                        android:text="登录"
+                        android:textColor="@color/GENERAL_BUTTON_TEXT_COLOR"
+                        android:textSize="22.0sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@id/bottomLoginViews1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25.0dip"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@id/forgotPassSplashButton1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15.0dip"
+                        android:clickable="true"
+                        android:padding="8.0dip"
+                        android:shadowColor="@color/FORGOT_PASS_TITLE_SHADOW_COLOR"
+                        android:shadowDx="1.0"
+                        android:shadowDy="1.0"
+                        android:text="忘记您的密码?"
+                        android:shadowRadius="2.0"
+                        android:textColor="#ff81a97c"
+                        android:textSize="18.0sp"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="30.0dip"
+                        android:layout_marginLeft="15.0dip"
+                        android:layout_marginRight="15.0dip"
+                        android:visibility="gone"
+                        android:layout_marginTop="10.0dip">
+
+                        <Button
+                            android:id="@id/openAccountSplashButton1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/open_account_botton_selector"
+                            android:paddingBottom="12.0dip"
+                            android:paddingTop="12.0dip"
+                            android:shadowColor="@color/OPEN_ACCOUNT_BUTTON_TEXT_SHADOW_COLOR"
+                            android:shadowDx="1.0"
+                            android:shadowDy="1.0"
+                            android:shadowRadius="2.0"
+                            android:textColor="@color/OPEN_ACCOUNT_BUTTON_TEXT_COLOR"
+                            android:textSize="22.0sp"
+                            android:textStyle="bold"
+                            android:visibility="visible" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

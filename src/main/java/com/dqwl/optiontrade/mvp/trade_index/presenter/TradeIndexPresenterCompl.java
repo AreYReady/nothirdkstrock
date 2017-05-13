@@ -25,10 +25,10 @@ import java.util.TreeMap;
  * @date 2016-08-22
  */
 public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
-    private ITradeIndexView mTradeIndexView;
     private ArrayList<BeanSymbolConfig.SymbolsBean> realTimeDatas = new ArrayList<>();//实时数据
     private ArrayList<BeanSymbolConfig.SymbolsBean> realTimeDatasTemp = new ArrayList<>();//保存实时数据，以便恢复
     private Handler mHandler;
+    private ITradeIndexView mTradeIndexView;
     private String TAG= SystemUtil.getTAG(this);
 
 
@@ -160,6 +160,9 @@ public class TradeIndexPresenterCompl implements ITradeIndexPresenter {
         }
     }
 
+    /**
+     * 发送心跳
+     */
     @Override
     public void responseHeartBeat() {
         sendMessageToServer("{\"msg_type\":2}");

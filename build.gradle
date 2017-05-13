@@ -41,6 +41,7 @@ android {
         星科技_ {
             applicationIdSuffix ".xingkeji"
             buildConfigField 'String', 'API_URL', '"115.29.50.147"'
+//            buildConfigField 'String', 'API_URL', '"bb.bbryt.cn"'
             buildConfigField 'Integer', 'USERPORT', '9988'
             resValue "string", "app_name", "星科技"
         }
@@ -51,6 +52,12 @@ android {
             resValue "string", "app_name", "MGF"
             versionCode 1
             versionName "1.0.4"
+        }
+        VANLong {
+//            applicationIdSuffix ".vanlong "
+            buildConfigField 'String', 'API_URL', '"mm.vanlongfx.com"'
+            buildConfigField 'Integer', 'USERPORT', '10001'
+            resValue "string", "app_name", "VANLong"
         }
         local {
             applicationIdSuffix ".local"
